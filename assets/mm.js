@@ -256,7 +256,26 @@
     const mSplit = SplitText.create('.show .manchete', { type: 'words', wordsClass: 'mw' });
     gsap.set(mSplit.words, { opacity: 0, filter: 'blur(16px)', y: 10 });
     gsap.set('.show .prog', { opacity: 0 });
-    const fls = [...document.querySelectorAll('.show .fl')];
+    /* itens flutuantes: cada recurso tem o seu grupo de 4 cartoes, que trocam (um desfoca e sai, o outro foca e entra) */
+    const SLOTS = [[-.7, -.42, 1, 0], [.7, -.34, 0, 1.6], [-.74, .34, 0, 1.6], [.72, .44, 1, 0]];
+    const ICO = { ig: 'i-igreja', co: 'i-coracao', ma: 'i-mala', ge: 'i-gente', ca: 'i-casa', li: 'i-livro', gr: 'i-graf', se: 'i-gear', be: 'i-bell' };
+    const GR = [
+      [['ig', 'Morning Prayer', '7:00 am · done'], ['co', 'Exercise', '8:30 am · 30m'], ['ma', 'Focused Work', '10:00 am · 2h'], ['ge', 'Family Time', '5:00 pm · 2h']],
+      [['be', 'Notifications', 'paused'], ['ma', 'Deep Work', '1h 22m left'], ['se', 'Focus mode', 'on'], ['ca', 'Apps blocked', 'until 10:30 am']],
+      [['ring', '12-day streak', 'keep going'], ['gr', '86% kept', '24 of 28 this week'], ['ma', '18h focused', 'this week'], ['gr', '142 blocked', 'distractions']],
+      [['li', '7 Principles', 'of monastic wisdom'], ['ig', 'Show Up', 'Meditation and Prayer'], ['ge', 'Healthy Community', 'Community and Family'], ['co', 'Choose Love', 'Love is your purpose']]
+    ];
+    const flBox = document.getElementById('fls');
+    const flG = GR.map((g, gi) => g.map((d, si) => {
+      const [dx, dy, fr, bl] = SLOTS[si];
+      const el = document.createElement('div'); el.className = 'fl ' + (fr ? 'fr' : 'tr');
+      el.style.setProperty('--dx', dx); el.style.setProperty('--dy', dy); el.style.setProperty('--fl-d', (5 + ((gi + si) % 4) * .9) + 's');
+      el.dataset.bl = bl; el.dataset.p = [1, -.6, .7, -1][si];
+      const ic = d[0] === 'ring' ? '<span class="ic anelzinho"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.9" pathLength="100" class="a"/><circle cx="18" cy="18" r="15.9" pathLength="100" class="b"/></svg></span>' : '<span class="ic"><svg fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><use href="#' + ICO[d[0]] + '"/></svg></span>';
+      el.innerHTML = '<div class="in">' + ic + '<div><b>' + d[1] + '</b><small>' + d[2] + '</small></div></div>';
+      flBox.appendChild(el); return el;
+    }));
+    const fls = flG.flat();
     const stg = document.querySelector('.show .stage');
     const sr0 = stg.getBoundingClientRect();
     fls.forEach(el => {
@@ -264,9 +283,8 @@
       el._fx = (sr0.left + sr0.width / 2) - (r.left + r.width / 2);
       el._fy = (sr0.top + sr0.height / 2) - (r.top + r.height / 2);
     });
-    gsap.set(fls, { opacity: 0, scale: .3, x: (i, el) => el._fx, y: (i, el) => el._fy });
+    gsap.set(fls, { opacity: 0, scale: .4, filter: 'blur(14px)', x: (i, el) => el._fx, y: (i, el) => el._fy });
     gsap.set('.show .call', { opacity: 0 });
-    gsap.set('.show .ln b', { scaleX: 0 });
     /* pinos ancorados nos elementos reais da tela do app (filhos da .tela: giram junto com o celular) */
     const tela = fones.app.el.querySelector('.tela'), stage = document.querySelector('.show .stage');
     const posEm = (el, raiz) => { let x = 0, y = 0; while (el && el !== raiz) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; } return { x, y }; };
@@ -280,20 +298,31 @@
       pin.style.left = ((p.x + alvo.offsetWidth * (esq ? .14 : .86)) / W * 100) + '%';
       pin.style.top = ((p.y + alvo.offsetHeight / 2) / H * 100) + '%';
       tela.appendChild(pin); c._pin = pin;
+      const svg = document.getElementById('lineas'), NS = 'http://www.w3.org/2000/svg';
+      const path = document.createElementNS(NS, 'path'); path.setAttribute('pathLength', '1'); path.setAttribute('class', 'lin');
+      const dot = document.createElementNS(NS, 'circle'); dot.setAttribute('r', '3.2'); dot.setAttribute('class', 'luz');
+      svg.appendChild(path); svg.appendChild(dot); c._path = path; c._dot = dot;
+      gsap.set(path, { strokeDasharray: 1, strokeDashoffset: 1 }); gsap.set(dot, { opacity: 0 });
     });
     /* cada anotacao se alinha na altura do seu alvo e a linha vai ate o pino, mesmo com o celular girando */
     const alinha = () => {
       if (passoAtual < 0 || !grupos[passoAtual]) return;
-      const sr = stage.getBoundingClientRect();
-      grupos[passoAtual].querySelectorAll('.call').forEach(c => {
-        if (!c._pin) return;
+      const sr = stage.getBoundingClientRect(), tt = performance.now() / 2600;
+      grupos[passoAtual].querySelectorAll('.call').forEach((c, k) => {
+        if (!c._pin || !c._path) return;
         const pr = c._pin.getBoundingClientRect(), cr = c.getBoundingClientRect();
-        const px = pr.left + pr.width / 2, py = pr.top + pr.height / 2;
-        c.style.top = (py - sr.top) + 'px';
-        const d = c.classList.contains('l') ? px - cr.right : cr.left - px;
-        c.querySelector('.ln').style.width = Math.max(12, d) + 'px';
+        const ex = pr.left + pr.width / 2 - sr.left, ey = pr.top + pr.height / 2 - sr.top;
+        const esq = c.classList.contains('l');
+        const sx = (esq ? cr.right + 14 : cr.left - 14) - sr.left, sy = cr.top + 14 - sr.top;
+        const dx = (ex - sx) * .55;
+        c._path.setAttribute('d', 'M' + sx + ' ' + sy + ' C' + (sx + dx) + ' ' + sy + ' ' + (ex - dx) + ' ' + ey + ' ' + ex + ' ' + ey);
+        const L = c._path.getTotalLength(), u = (tt + k * .37) % 1;
+        const pt = c._path.getPointAtLength(u * L);
+        c._dot.setAttribute('cx', pt.x); c._dot.setAttribute('cy', pt.y);
+        c._dot.style.opacity = c._pin._on ? Math.sin(u * Math.PI) : 0;
       });
     };
+    gsap.ticker.add(alinha);
     gsap.to(fones.app.el, { y: -7, duration: 2.6, ease: 'sine.inOut', yoyo: true, repeat: -1 });
     showTL = gsap.timeline({
       defaults: { ease: 'none' },
@@ -303,7 +332,6 @@
           const t = self.progress * showTL.duration();
           ativa(t < INTRO ? -1 : Math.min(3, Math.floor((t - INTRO) / PASSO)));
           dots.forEach((b, n) => gsap.set(b.firstElementChild, { scaleX: Math.min(1, Math.max(0, (t - INTRO - n * PASSO) / PASSO)) }));
-          alinha();
         }
       }
     });
@@ -314,10 +342,15 @@
       .to(ap, { y: 0, rotationY: 0, rotationZ: 0, rotationX: 0, scale: 1, duration: 1.4, ease: 'power2.out' }, 2.2)
       .to('.show .halo', { opacity: 1, duration: .6 }, 2.8)
       .to('.show .prog', { opacity: 1, duration: .4 }, INTRO - .4);
-    /* itens do app saltam da tela do celular, em profundidade (os de tras desfocados), e derivam com a rolagem */
-    fls.forEach((el, i) => {
-      showTL.to(el, { x: 0, y: 0, scale: +el.dataset.s || 1, opacity: 1, duration: .75, ease: 'back.out(1.5)' }, INTRO - .2 + i * .14);
-      showTL.to(el, { yPercent: (+el.dataset.p || 0) * -60, duration: 4 * PASSO, ease: 'none' }, INTRO);
+    /* a cada recurso o grupo anterior desfoca e sai e o novo salta da tela do celular, focando; todos derivam com a rolagem */
+    flG.forEach((grp, gi) => {
+      const tIn = gi === 0 ? INTRO - .2 : INTRO + gi * PASSO - .05;
+      grp.forEach((el, si) => {
+        const bl = +el.dataset.bl;
+        showTL.to(el, { x: 0, y: 0, scale: 1, opacity: 1, filter: 'blur(' + bl + 'px)', duration: .7, ease: 'back.out(1.5)' }, tIn + si * .1);
+        if (gi < 3) showTL.to(el, { opacity: 0, scale: .82, filter: 'blur(16px)', duration: .3, ease: 'power2.in' }, INTRO + (gi + 1) * PASSO - .38 + si * .03);
+        showTL.fromTo(el, { yPercent: 0 }, { yPercent: (+el.dataset.p) * -34, duration: PASSO + .4, ease: 'none', immediateRender: false }, INTRO + gi * PASSO - .1);
+      });
     });
     grupos.forEach((g, i) => {
       const t0 = INTRO + i * PASSO;
@@ -328,9 +361,9 @@
         const d = t0 + .15 + k * .25, dir = c.classList.contains('l') ? -1 : 1;
         showTL.fromTo(c, { opacity: 0, x: 22 * dir }, { opacity: 1, x: 0, duration: .3 }, d)
           .to(c._w, { opacity: 1, filter: 'blur(0px)', y: 0, duration: .3, stagger: .022 }, d + .05)
-          .fromTo(c.querySelector('.ln b'), { scaleX: 0 }, { scaleX: 1, duration: .35 }, d + .1)
-          .fromTo(c._pin, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: .25, ease: 'back.out(2)' }, d + .3);
-        if (i < 3) showTL.to([c, c._pin], { opacity: 0, duration: .25 }, t0 + PASSO - .3).to(c._w, { opacity: 0, filter: 'blur(8px)', duration: .25 }, t0 + PASSO - .3);
+          .fromTo(c._path, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: .55, ease: 'power2.inOut' }, d + .05)
+          .fromTo(c._pin, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: .3, ease: 'back.out(2)', onStart: () => { c._pin._on = true; }, onReverseComplete: () => { c._pin._on = false; } }, d + .45);
+        if (i < 3) showTL.to([c, c._pin], { opacity: 0, duration: .25 }, t0 + PASSO - .3).to(c._path, { strokeDashoffset: -1, duration: .3, ease: 'power2.in', onComplete: () => { c._pin._on = false; } }, t0 + PASSO - .3).to(c._w, { opacity: 0, filter: 'blur(8px)', duration: .25 }, t0 + PASSO - .3);
       });
     });
     showTL.to(ap, { rotationY: 0, rotationX: 0, rotationZ: 0, duration: .5, ease: 'power2.inOut' }, INTRO + 4 * PASSO - .55);
