@@ -503,3 +503,10 @@ p,li,blockquote{text-wrap:pretty}
   .show .stage{--pw:min(62vw,calc((100svh - 21.5rem) / 2.108),22rem)}
   .show .cj{inset:calc(6.2rem + var(--ph) + 1.8rem) 0 auto 0}
 }
+
+/* hero em video: fundo inteiro + frente (com a mascara do ceu); as imagens ficam de reserva */
+.hero .fundo-v{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 82%;opacity:0;transition:opacity .9s ease}
+.hero .frente-v{position:absolute;inset:0;z-index:2;width:100%;height:100%;object-fit:cover;object-position:50% 82%;transform-origin:50% 82%;pointer-events:none;will-change:transform;opacity:0;transition:opacity .9s ease;-webkit-mask:url(img/paisagem-frente.webp) 50% 82%/cover no-repeat;mask:url(img/paisagem-frente.webp) 50% 82%/cover no-repeat}
+.hero.v-on .fundo-v,.hero.v-on .frente-v{opacity:1}
+.hero.v-off .fundo,.hero.v-off .frente{visibility:hidden}
+@media (prefers-reduced-motion:reduce){.hero .fundo-v,.hero .frente-v{display:none}}

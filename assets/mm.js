@@ -146,6 +146,11 @@
   const frente = document.getElementById('frente');
   const sol = document.getElementById('sol');
   const camadas = [cena, frente, sol];
+  /* o video tem 1280 px: no celular (esticado e ampliado) fica mais mole que a foto, entao la fica a foto ate sair a versao Full HD */
+  const VIDEO_NO_CELULAR = false;
+  let vFundo = document.getElementById('fundo-v'), vFrente = document.getElementById('frente-v');
+  if (reduz || (innerWidth <= 900 && !VIDEO_NO_CELULAR)) { vFundo && vFundo.remove(); vFrente && vFrente.remove(); vFundo = vFrente = null; }
+  if (vFrente) camadas.push(vFrente);
   const titulo = document.querySelector('#hero .titulo');
   if (!reduz) {
     /* iris blur: copia desfocada do titulo por cima; a mascara do titulo nitido e a da copia sao complementares, com o foco no mouse */
@@ -156,7 +161,7 @@
     const ZOOM = innerWidth < 900 ? 1.35 : 1.4;
     /* entrada (referencia Frostbound): a nevoa se abre. O fundo comeca lavado e dessaturado e ganha cor e nitidez;
        as letras do titulo saem do desfoque uma a uma; depois entram a barra, o subtitulo e o botao */
-    const fotos = [cena.querySelector('.fundo'), frente];
+    const fotos = [cena.querySelector('.fundo'), frente, vFundo, vFrente].filter(Boolean);
     gsap.set(sp.chars, { opacity: 0, filter: 'blur(18px)', scale: 1.08 });
     gsap.set([titulo, copia], { letterSpacing: '.03em' });
     gsap.set(copia, { opacity: 0 });
@@ -205,6 +210,16 @@
       gsap.ticker.add(() => { cx += (tx - cx) * .08; cy += (ty - cy) * .08; hero.style.setProperty('--ix', cx + '%'); hero.style.setProperty('--iy', cy + '%'); });
     }
 
+  }
+
+  /* video do hero: toca em loop, as duas camadas em sincronia; pausa quando o hero sai da tela */
+  if (!reduz && vFundo && vFrente) {
+    const heroEl = document.getElementById('hero');
+    vFundo.addEventListener('playing', () => { heroEl.classList.add('v-on'); setTimeout(() => heroEl.classList.add('v-off'), 1100); }, { once: true });
+    const toca = () => { vFundo.play().catch(() => {}); vFrente.play().catch(() => {}); };
+    toca();
+    setInterval(() => { if (!vFundo.paused && Math.abs(vFrente.currentTime - vFundo.currentTime) > .04) vFrente.currentTime = vFundo.currentTime; }, 1000);
+    new IntersectionObserver(es => { es[0].isIntersecting ? toca() : (vFundo.pause(), vFrente.pause()); }, { threshold: 0 }).observe(heroEl);
   }
 
   /* ---------- problema: leque de cartas que troca na rolagem ---------- */
