@@ -148,6 +148,8 @@
   const camadas = [cena, frente, sol];
   const titulo = document.querySelector('#hero .titulo');
   if (!reduz) {
+    /* iris blur: copia desfocada do titulo por cima; a mascara do titulo nitido e a da copia sao complementares, com o foco no mouse */
+    const copia = titulo.cloneNode(true); copia.className = 'titulo titulo-b'; copia.setAttribute('aria-hidden', 'true'); titulo.after(copia);
     const sp = SplitText.create(titulo.querySelectorAll('span'), { type: 'chars', charsClass: 'ch' });
     const lede = SplitText.create('#lede', { type: 'words', wordsClass: 'mw' });
     gsap.set(lede.words, { opacity: 0, filter: 'blur(14px)', y: 12 });
@@ -156,7 +158,8 @@
        as letras do titulo saem do desfoque uma a uma; depois entram a barra, o subtitulo e o botao */
     const fotos = [cena.querySelector('.fundo'), frente];
     gsap.set(sp.chars, { opacity: 0, filter: 'blur(18px)', scale: 1.08 });
-    gsap.set(titulo, { letterSpacing: '.03em' });
+    gsap.set([titulo, copia], { letterSpacing: '.03em' });
+    gsap.set(copia, { opacity: 0 });
     gsap.set(fotos, { filter: 'saturate(.2) brightness(1.22) blur(8px)' });
     gsap.set('#hero .base > *', { opacity: 0, y: 24 });
     gsap.set('.topo .barra', { opacity: 0, y: -22 });
@@ -166,8 +169,10 @@
       .to(fotos, { filter: 'saturate(1) brightness(1) blur(0px)', duration: 2.8, ease: 'power2.inOut' }, 0)
       .to('.topo .barra', { opacity: 1, y: 0, duration: 1 }, .3)
       .to(sp.chars, { opacity: 1, filter: 'blur(0px)', scale: 1, duration: 1.4, stagger: .07 }, .5)
-      .to(titulo, { letterSpacing: '-.045em', duration: 2.6, ease: 'power3.out' }, .5)
+      .to([titulo, copia], { letterSpacing: '-.045em', duration: 2.6, ease: 'power3.out' }, .5)
       .to('#hero .base > *', { opacity: 1, y: 0, duration: 1, stagger: .14 }, 1.9)
+      .to(copia, { opacity: 1, duration: 1.6, ease: 'sine.inOut' }, 2.6)
+      .to('#hero', { '--ia': 0, duration: 1.6, ease: 'sine.inOut' }, 2.6)
       .set(fotos, { clearProps: 'filter' }, 2.9);
 
     /* rolagem: 1) zoom out total, com o texto pequeno surgindo palavra por palavra do desfoque;
@@ -178,10 +183,11 @@
       .to(lede.words, { opacity: 1, filter: 'blur(0px)', y: 0, duration: .2, stagger: .045 }, .06)
       .to(lede.words.slice(-3), { fontWeight: 800, color: '#0f2a42', duration: .2, stagger: .05 }, .5)
       .to({}, { duration: .1 }, .9)
-      .to([titulo, '#lede'], { y: () => innerHeight * .85, duration: .4, ease: 'power1.in' }, 1.0)
+      .to([titulo, copia, '#lede'], { y: () => innerHeight * .85, duration: .4, ease: 'power1.in' }, 1.0)
       /* saida = inverso da entrada: o texto fica enevoado e desfocado enquanto desce atras da montanha */
-      .to([titulo, '#lede'], { filter: 'blur(42px)', opacity: .08, duration: .4, ease: 'power1.in' }, 1.0)
-      .to(titulo, { letterSpacing: '.02em', duration: .4, ease: 'power1.in' }, 1.0);
+      .to([titulo, copia, '#lede'], { filter: 'blur(42px)', opacity: .08, duration: .4, ease: 'power1.in' }, 1.0)
+      .to([titulo, copia], { letterSpacing: '.02em', duration: .4, ease: 'power1.in' }, 1.0);
+
   }
 
   /* ---------- problema: leque de cartas que troca na rolagem ---------- */
@@ -259,6 +265,15 @@
     gsap.set('.show .call', { opacity: 0 });
     /* pinos ancorados nos elementos reais da tela do app (filhos da .tela: giram junto com o celular) */
     const tela = fones.app.el.querySelector('.tela'), stage = document.querySelector('.show .stage');
+    /* desktop: o aparelho alterna de lado a cada recurso e o texto fica sempre colado nele, do lado oposto */
+    const larg = () => innerWidth > 900;
+    const medeCol = () => {
+      const rem = parseFloat(getComputedStyle(document.documentElement).fontSize), tw = Math.min(26 * rem, innerWidth * .32), gap = 8 * rem;
+      stage.style.setProperty('--colw', tw + 'px'); stage.style.setProperty('--colgap', gap + 'px');
+      return larg() ? (tw + gap) / 2 : 0;
+    };
+    medeCol(); ScrollTrigger.addEventListener('refreshInit', medeCol);
+    gsap.set(stage, { '--px': '0px' });
     document.querySelectorAll('.show .call').forEach(c => {
       const sp = SplitText.create(c.querySelectorAll('h3, p'), { type: 'words', wordsClass: 'cw' }); c._w = sp.words;
       gsap.set(c._w, { opacity: 0, filter: 'blur(4px)', y: 6 });
@@ -267,7 +282,7 @@
     showTL = gsap.timeline({
       defaults: { ease: 'none' },
       scrollTrigger: {
-        trigger: '#app', start: 'top top', end: '+=990%', pin: true, scrub: .6, anticipatePin: 1, refreshPriority: 2,
+        trigger: '#app', start: 'top top', end: '+=990%', pin: true, scrub: .6, anticipatePin: 1, refreshPriority: 2, invalidateOnRefresh: true,
         onUpdate: self => {
           const t = self.progress * showTL.duration();
           ativa(t < INTRO ? -1 : Math.min(3, Math.floor((t - INTRO) / PASSO)));
@@ -286,6 +301,7 @@
       const t0 = INTRO + i * PASSO;
       /* a cada recurso o celular da uma meia-volta no eixo: esquerda, direita, esquerda, direita */
       const giro = i % 2 === 0 ? -12 : 12;
+      if (larg()) showTL.to(stage, { '--px': () => (i % 2 === 0 ? 1 : -1) * medeCol() + 'px', duration: 1.6, ease: 'sine.inOut' }, t0 - (i === 0 ? .9 : .5));
       showTL.to(ap, { rotationY: giro, rotationX: 4, rotationZ: -giro * .1, duration: 1.6, ease: 'sine.inOut' }, t0 - .1);
       g.querySelectorAll('.call').forEach((c, k) => {
         const d = t0 + .2 + k * .5, dir = c.classList.contains('l') ? -1 : 1;
