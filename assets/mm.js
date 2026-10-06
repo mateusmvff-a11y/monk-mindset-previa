@@ -300,14 +300,13 @@
       tela.appendChild(pin); c._pin = pin;
       const svg = document.getElementById('lineas'), NS = 'http://www.w3.org/2000/svg';
       const path = document.createElementNS(NS, 'path'); path.setAttribute('pathLength', '1'); path.setAttribute('class', 'lin');
-      const dot = document.createElementNS(NS, 'circle'); dot.setAttribute('r', '3.2'); dot.setAttribute('class', 'luz');
-      svg.appendChild(path); svg.appendChild(dot); c._path = path; c._dot = dot;
-      gsap.set(path, { strokeDasharray: 1, strokeDashoffset: 1 }); gsap.set(dot, { opacity: 0 });
+      svg.appendChild(path); c._path = path;
+      gsap.set(path, { strokeDasharray: 1, strokeDashoffset: 1 });
     });
     /* cada anotacao se alinha na altura do seu alvo e a linha vai ate o pino, mesmo com o celular girando */
     const alinha = () => {
       if (passoAtual < 0 || !grupos[passoAtual]) return;
-      const sr = stage.getBoundingClientRect(), tt = performance.now() / 2600;
+      const sr = stage.getBoundingClientRect();
       grupos[passoAtual].querySelectorAll('.call').forEach((c, k) => {
         if (!c._pin || !c._path) return;
         const pr = c._pin.getBoundingClientRect(), cr = c.getBoundingClientRect();
@@ -316,10 +315,6 @@
         const sx = (esq ? cr.right + 14 : cr.left - 14) - sr.left, sy = cr.top + 14 - sr.top;
         const dx = (ex - sx) * .55;
         c._path.setAttribute('d', 'M' + sx + ' ' + sy + ' C' + (sx + dx) + ' ' + sy + ' ' + (ex - dx) + ' ' + ey + ' ' + ex + ' ' + ey);
-        const L = c._path.getTotalLength(), u = (tt + k * .37) % 1;
-        const pt = c._path.getPointAtLength(u * L);
-        c._dot.setAttribute('cx', pt.x); c._dot.setAttribute('cy', pt.y);
-        c._dot.style.opacity = c._pin._on ? Math.sin(u * Math.PI) : 0;
       });
     };
     gsap.ticker.add(alinha);
