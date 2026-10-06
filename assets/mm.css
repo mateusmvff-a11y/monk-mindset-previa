@@ -357,7 +357,6 @@ h1,h2,h3{font-family:var(--f-tit);font-weight:600;color:var(--tinta);letter-spac
   .show .manchete{font-size:clamp(1.7rem,7.2vw,2.5rem)}
   .show .aparelho{top:calc(6.2rem + var(--ph) / 2)}
   .show .halo{top:calc(6.2rem + var(--ph) * .3);height:auto;width:100%}
-  .fone .pin{display:none}
   .show .cj{inset:auto 0 1.2rem 0;padding-inline:var(--pad);display:grid;gap:.6rem}
   .show .call .n{margin-bottom:.25rem}
   .show .call p{font-size:.92rem;line-height:1.38;margin-top:.4rem}
@@ -418,8 +417,7 @@ h1,h2,h3{font-family:var(--f-tit);font-weight:600;color:var(--tinta);letter-spac
 @media (hover:none){.quem figure:hover,.faz .lado:hover,.final .cartao:hover,.depo blockquote:hover,.pc:hover{translate:none}}
 
 /* pinos ancorados nos elementos reais da tela do app (giram junto com o celular) */
-.fone .pin{position:absolute;z-index:12;width:7cqw;height:7cqw;margin:-3.5cqw 0 0 -3.5cqw;border-radius:50%;background:var(--azul);box-shadow:0 0 0 1.4cqw rgba(79,117,146,.28);pointer-events:none;opacity:0;transform:scale(0)}
-.fone .pin::after{content:"";position:absolute;inset:-1.4cqw;border-radius:50%;border:.5cqw solid rgba(79,117,146,.55);animation:pulso 2.4s ease-out infinite}
+.fone .pin{position:absolute;z-index:12;border-radius:3.4cqw;border:.5cqw solid rgba(79,117,146,.55);background:rgba(79,117,146,.05);box-shadow:0 0 5cqw rgba(79,117,146,.22);pointer-events:none;opacity:0}
 @keyframes pulso{from{transform:scale(.8);opacity:.9}to{transform:scale(2.1);opacity:0}}
 .show .call .ln b{background:linear-gradient(90deg,var(--tinta),var(--azul))}
 .show .call.r .ln b{background:linear-gradient(270deg,var(--tinta),var(--azul))}

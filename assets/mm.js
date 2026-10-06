@@ -245,7 +245,7 @@
     ct.textContent = '0' + (k + 1);
     fones.app.mostra(nomes[k]);
   }
-  const INTRO = 3.6, PASSO = 2.3;
+  const INTRO = 3.6, PASSO = 3.1;
   let showTL = null;
   const ap = document.getElementById('aparelho');
   gsap.set(ap, { xPercent: -50, yPercent: -50 });
@@ -293,36 +293,16 @@
       gsap.set(c._w, { opacity: 0, filter: 'blur(4px)', y: 6 });
       const alvo = tela.querySelector(c.dataset.t); if (!alvo) return;
       const p = posEm(alvo, tela), W = tela.offsetWidth, H = tela.offsetHeight;
-      const esq = c.classList.contains('l');
       const pin = document.createElement('i'); pin.className = 'pin';
-      pin.style.left = ((p.x + alvo.offsetWidth * (esq ? .14 : .86)) / W * 100) + '%';
-      pin.style.top = ((p.y + alvo.offsetHeight / 2) / H * 100) + '%';
+      pin.style.left = 'calc(' + (p.x / W * 100) + '% - 1.4cqw)'; pin.style.top = 'calc(' + (p.y / H * 100) + '% - 1.4cqw)';
+      pin.style.width = 'calc(' + (alvo.offsetWidth / W * 100) + '% + 2.8cqw)'; pin.style.height = 'calc(' + (alvo.offsetHeight / H * 100) + '% + 2.8cqw)';
       tela.appendChild(pin); c._pin = pin;
-      const svg = document.getElementById('lineas'), NS = 'http://www.w3.org/2000/svg';
-      const path = document.createElementNS(NS, 'path'); path.setAttribute('pathLength', '1'); path.setAttribute('class', 'lin');
-      svg.appendChild(path); c._path = path;
-      gsap.set(path, { strokeDasharray: 1, strokeDashoffset: 1 });
     });
-    /* cada anotacao se alinha na altura do seu alvo e a linha vai ate o pino, mesmo com o celular girando */
-    const alinha = () => {
-      if (passoAtual < 0 || !grupos[passoAtual]) return;
-      const sr = stage.getBoundingClientRect();
-      grupos[passoAtual].querySelectorAll('.call').forEach((c, k) => {
-        if (!c._pin || !c._path) return;
-        const pr = c._pin.getBoundingClientRect(), cr = c.getBoundingClientRect();
-        const ex = pr.left + pr.width / 2 - sr.left, ey = pr.top + pr.height / 2 - sr.top;
-        const esq = c.classList.contains('l');
-        const sx = (esq ? cr.right + 14 : cr.left - 14) - sr.left, sy = cr.top + 14 - sr.top;
-        const dx = (ex - sx) * .55;
-        c._path.setAttribute('d', 'M' + sx + ' ' + sy + ' C' + (sx + dx) + ' ' + sy + ' ' + (ex - dx) + ' ' + ey + ' ' + ex + ' ' + ey);
-      });
-    };
-    gsap.ticker.add(alinha);
     gsap.to(fones.app.el, { y: -7, duration: 2.6, ease: 'sine.inOut', yoyo: true, repeat: -1 });
     showTL = gsap.timeline({
       defaults: { ease: 'none' },
       scrollTrigger: {
-        trigger: '#app', start: 'top top', end: '+=900%', pin: true, scrub: .6, anticipatePin: 1, refreshPriority: 2,
+        trigger: '#app', start: 'top top', end: '+=990%', pin: true, scrub: .6, anticipatePin: 1, refreshPriority: 2,
         onUpdate: self => {
           const t = self.progress * showTL.duration();
           ativa(t < INTRO ? -1 : Math.min(3, Math.floor((t - INTRO) / PASSO)));
@@ -342,8 +322,8 @@
       const tIn = gi === 0 ? INTRO - .2 : INTRO + gi * PASSO - .05;
       grp.forEach((el, si) => {
         const bl = +el.dataset.bl;
-        showTL.to(el, { x: 0, y: 0, scale: 1, opacity: 1, filter: 'blur(' + bl + 'px)', duration: 1.4, ease: 'sine.out' }, tIn + si * .28);
-        if (gi < 3) showTL.to(el, { opacity: 0, scale: .92, filter: 'blur(6px)', duration: .8, ease: 'sine.inOut' }, INTRO + (gi + 1) * PASSO - .9 + si * .08);
+        showTL.to(el, { x: 0, y: 0, scale: 1, opacity: 1, filter: 'blur(' + bl + 'px)', duration: 1.0, ease: 'sine.out' }, tIn + si * .2);
+        if (gi < 3) showTL.to(el, { opacity: 0, scale: .92, filter: 'blur(6px)', duration: .6, ease: 'sine.inOut' }, INTRO + (gi + 1) * PASSO - .6 + si * .05);
         showTL.fromTo(el, { yPercent: 0 }, { yPercent: (+el.dataset.p) * -18, duration: PASSO + .4, ease: 'none', immediateRender: false }, INTRO + gi * PASSO - .1);
       });
     });
@@ -353,12 +333,11 @@
       const giro = i % 2 === 0 ? -12 : 12;
       showTL.to(ap, { rotationY: giro, rotationX: 4, rotationZ: -giro * .1, duration: 1.6, ease: 'sine.inOut' }, t0 - .1);
       g.querySelectorAll('.call').forEach((c, k) => {
-        const d = t0 + .3 + k * .45, dir = c.classList.contains('l') ? -1 : 1;
-        showTL.fromTo(c, { opacity: 0, x: 10 * dir }, { opacity: 1, x: 0, duration: .9, ease: 'sine.out' }, d)
-          .to(c._w, { opacity: 1, filter: 'blur(0px)', y: 0, duration: .8, stagger: .04, ease: 'sine.out' }, d + .1)
-          .fromTo(c._path, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.2, ease: 'sine.inOut' }, d + .1)
-          .fromTo(c._pin, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: .8, ease: 'sine.out', onStart: () => { c._pin._on = true; }, onReverseComplete: () => { c._pin._on = false; } }, d + .9);
-        if (i < 3) showTL.to([c, c._pin], { opacity: 0, duration: .6, ease: 'sine.inOut' }, t0 + PASSO - .75).to(c._path, { strokeDashoffset: -1, duration: .7, ease: 'sine.inOut', onComplete: () => { c._pin._on = false; } }, t0 + PASSO - .75).to(c._w, { opacity: 0, filter: 'blur(4px)', duration: .6 }, t0 + PASSO - .75);
+        const d = t0 + .2 + k * .5, dir = c.classList.contains('l') ? -1 : 1;
+        showTL.fromTo(c, { opacity: 0, x: 10 * dir }, { opacity: 1, x: 0, duration: .7, ease: 'sine.out' }, d)
+          .to(c._w, { opacity: 1, filter: 'blur(0px)', y: 0, duration: .6, stagger: .03, ease: 'sine.out' }, d + .05)
+          .fromTo(c._pin, { opacity: 0, scale: .97 }, { opacity: 1, scale: 1, duration: 1.1, ease: 'sine.out' }, d + .3);
+        if (i < 3) showTL.to([c, c._pin], { opacity: 0, duration: .5, ease: 'sine.inOut' }, t0 + PASSO - .55).to(c._w, { opacity: 0, filter: 'blur(4px)', duration: .5 }, t0 + PASSO - .55);
       });
     });
     showTL.to(ap, { rotationY: 0, rotationX: 0, rotationZ: 0, duration: 1, ease: 'sine.inOut' }, INTRO + 4 * PASSO - 1.1);
