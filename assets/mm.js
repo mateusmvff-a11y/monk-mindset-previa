@@ -171,8 +171,6 @@
       .to(sp.chars, { opacity: 1, filter: 'blur(0px)', scale: 1, duration: 1.4, stagger: .07 }, .5)
       .to([titulo, copia], { letterSpacing: '-.045em', duration: 2.6, ease: 'power3.out' }, .5)
       .to('#hero .base > *', { opacity: 1, y: 0, duration: 1, stagger: .14 }, 1.9)
-      .to(copia, { opacity: 1, duration: 1.6, ease: 'sine.inOut' }, 2.6)
-      .to('#hero', { '--ia': 0, duration: 1.6, ease: 'sine.inOut' }, 2.6)
       .set(fotos, { clearProps: 'filter' }, 2.9);
 
     /* rolagem: 1) zoom out total, com o texto pequeno surgindo palavra por palavra do desfoque;
@@ -187,6 +185,25 @@
       /* saida = inverso da entrada: o texto fica enevoado e desfocado enquanto desce atras da montanha */
       .to([titulo, copia, '#lede'], { filter: 'blur(42px)', opacity: .08, duration: .4, ease: 'power1.in' }, 1.0)
       .to([titulo, copia], { letterSpacing: '.02em', duration: .4, ease: 'power1.in' }, 1.0);
+
+    /* hover: ao passar o mouse sobre o titulo entra um desfoque leve, com o foco seguindo o cursor */
+    if (matchMedia('(hover:hover)').matches) {
+      const hero = document.getElementById('hero');
+      let tx = 50, ty = 55, cx = 50, cy = 55, ligado = false;
+      const liga = on => {
+        if (on === ligado) return; ligado = on;
+        gsap.to(copia, { opacity: on ? 1 : 0, duration: .7, ease: 'sine.inOut', overwrite: 'auto' });
+        gsap.to(hero, { '--ia': on ? 0 : 1, duration: .7, ease: 'sine.inOut', overwrite: 'auto' });
+      };
+      hero.addEventListener('pointermove', e => {
+        const r = titulo.getBoundingClientRect();
+        const dentro = scrollY < innerHeight * .15 && e.clientY > r.top - 16 && e.clientY < r.bottom + 16;
+        liga(dentro);
+        if (dentro) { tx = (e.clientX - r.left) / r.width * 100; ty = (e.clientY - r.top) / r.height * 100; }
+      });
+      hero.addEventListener('pointerleave', () => liga(false));
+      gsap.ticker.add(() => { cx += (tx - cx) * .08; cy += (ty - cy) * .08; hero.style.setProperty('--ix', cx + '%'); hero.style.setProperty('--iy', cy + '%'); });
+    }
 
   }
 
@@ -268,7 +285,7 @@
     /* desktop: o aparelho alterna de lado a cada recurso e o texto fica sempre colado nele, do lado oposto */
     const larg = () => innerWidth > 900;
     const medeCol = () => {
-      const rem = parseFloat(getComputedStyle(document.documentElement).fontSize), tw = Math.min(26 * rem, innerWidth * .32), gap = 8 * rem;
+      const rem = parseFloat(getComputedStyle(document.documentElement).fontSize), tw = Math.min(26 * rem, innerWidth * .32), gap = 5 * rem;
       stage.style.setProperty('--colw', tw + 'px'); stage.style.setProperty('--colgap', gap + 'px');
       return larg() ? (tw + gap) / 2 : 0;
     };

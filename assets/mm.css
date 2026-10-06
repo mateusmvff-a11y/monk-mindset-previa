@@ -454,8 +454,8 @@ h1,h2,h3{font-family:var(--f-tit);font-weight:600;color:var(--tinta);letter-spac
   .show .stage{--pw:clamp(7rem,calc((100svh - 11rem) / 2.108),20rem);min-height:0}
   .show .aparelho,.show .halo,.show .prog{left:calc(50% + var(--px,0px))}
   .show .cj{inset:auto;top:50%;transform:translateY(-50%);width:var(--colw,26rem);display:grid;gap:1.4rem}
-  .show .cj[data-i="0"],.show .cj[data-i="2"]{left:calc(50% - (var(--colw) + var(--colgap)) / 2 - var(--pw) / 2)}
-  .show .cj[data-i="1"],.show .cj[data-i="3"]{left:calc(50% + (var(--pw) + var(--colgap) - var(--colw)) / 2)}
+  .show .cj[data-i="0"],.show .cj[data-i="2"]{left:calc(50% - (var(--colw) + var(--colgap)) / 2 - var(--pw) * .875)}
+  .show .cj[data-i="1"],.show .cj[data-i="3"]{left:calc(50% + (var(--pw) * 1.75 + var(--colgap) - var(--colw)) / 2)}
   .show .call,.show .call.l,.show .call.r{position:static;transform:none;width:auto;text-align:left}
   .show .call .n{font-size:1rem;margin-bottom:.8rem}
   .show .call h3{font-size:clamp(1.8rem,2.7vw,2.7rem);line-height:1.05}
@@ -464,9 +464,8 @@ h1,h2,h3{font-family:var(--f-tit);font-weight:600;color:var(--tinta);letter-spac
   .show .call:not(:first-child) p{color:var(--suave)}
 }
 
-/* iris blur discreto no titulo: so o canto inferior esquerdo do P e o inferior direito do y.
-   a copia desfocada aparece nas duas zonas; o titulo nitido some so ali (mascaras complementares) */
-.hero{--ia:1}
-.hero .titulo{-webkit-mask-image:radial-gradient(ellipse 8% 60% at 6.5% 98%,rgba(0,0,0,var(--ia)) 0%,#000 100%),radial-gradient(ellipse 8% 60% at 93.5% 98%,rgba(0,0,0,var(--ia)) 0%,#000 100%);-webkit-mask-composite:source-in;mask-image:radial-gradient(ellipse 8% 60% at 6.5% 98%,rgba(0,0,0,var(--ia)) 0%,#000 100%),radial-gradient(ellipse 8% 60% at 93.5% 98%,rgba(0,0,0,var(--ia)) 0%,#000 100%);mask-composite:intersect}
-.hero .titulo-b{pointer-events:none;filter:blur(8px);-webkit-mask-composite:source-over;mask-composite:add;-webkit-mask-image:radial-gradient(ellipse 8% 60% at 6.5% 98%,#000 0%,transparent 100%),radial-gradient(ellipse 8% 60% at 93.5% 98%,#000 0%,transparent 100%);mask-image:radial-gradient(ellipse 8% 60% at 6.5% 98%,#000 0%,transparent 100%),radial-gradient(ellipse 8% 60% at 93.5% 98%,#000 0%,transparent 100%)}
+/* iris blur no hover: a copia desfocada aparece onde o titulo nitido some (mascaras complementares), foco no cursor */
+.hero{--ix:50%;--iy:55%;--ia:1}
+.hero .titulo{-webkit-mask-image:radial-gradient(ellipse 38% 150% at var(--ix) var(--iy),#000 30%,rgba(0,0,0,var(--ia)) 100%);mask-image:radial-gradient(ellipse 38% 150% at var(--ix) var(--iy),#000 30%,rgba(0,0,0,var(--ia)) 100%)}
+.hero .titulo-b{pointer-events:none;filter:blur(3px);-webkit-mask-image:radial-gradient(ellipse 38% 150% at var(--ix) var(--iy),transparent 30%,#000 100%);mask-image:radial-gradient(ellipse 38% 150% at var(--ix) var(--iy),transparent 30%,#000 100%)}
 .hero .titulo{padding-block:.16em;margin-top:-.16em}
