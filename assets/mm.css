@@ -417,7 +417,6 @@ h1,h2,h3{font-family:var(--f-tit);font-weight:600;color:var(--tinta);letter-spac
 @media (hover:none){.quem figure:hover,.faz .lado:hover,.final .cartao:hover,.depo blockquote:hover,.pc:hover{translate:none}}
 
 /* pinos ancorados nos elementos reais da tela do app (giram junto com o celular) */
-.fone .pin{position:absolute;z-index:12;border-radius:3.4cqw;border:.5cqw solid rgba(79,117,146,.55);background:rgba(79,117,146,.05);box-shadow:0 0 5cqw rgba(79,117,146,.22);pointer-events:none;opacity:0}
 @keyframes pulso{from{transform:scale(.8);opacity:.9}to{transform:scale(2.1);opacity:0}}
 .show .call .ln b{background:linear-gradient(90deg,var(--tinta),var(--azul))}
 .show .call.r .ln b{background:linear-gradient(270deg,var(--tinta),var(--azul))}

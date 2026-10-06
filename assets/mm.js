@@ -256,47 +256,12 @@
     const mSplit = SplitText.create('.show .manchete', { type: 'words', wordsClass: 'mw' });
     gsap.set(mSplit.words, { opacity: 0, filter: 'blur(16px)', y: 10 });
     gsap.set('.show .prog', { opacity: 0 });
-    /* itens flutuantes: cada recurso tem o seu grupo de 4 cartoes, que trocam (um desfoca e sai, o outro foca e entra) */
-    const SLOTS = [[-.7, -.42, 1, 0], [.7, -.34, 0, 1.6], [-.74, .34, 0, 1.6], [.72, .44, 1, 0]];
-    const ICO = { ig: 'i-igreja', co: 'i-coracao', ma: 'i-mala', ge: 'i-gente', ca: 'i-casa', li: 'i-livro', gr: 'i-graf', se: 'i-gear', be: 'i-bell' };
-    const GR = [
-      [['ig', 'Morning Prayer', '7:00 am · done'], ['co', 'Exercise', '8:30 am · 30m'], ['ma', 'Focused Work', '10:00 am · 2h'], ['ge', 'Family Time', '5:00 pm · 2h']],
-      [['be', 'Notifications', 'paused'], ['ma', 'Deep Work', '1h 22m left'], ['se', 'Focus mode', 'on'], ['ca', 'Apps blocked', 'until 10:30 am']],
-      [['ring', '12-day streak', 'keep going'], ['gr', '86% kept', '24 of 28 this week'], ['ma', '18h focused', 'this week'], ['gr', '142 blocked', 'distractions']],
-      [['li', '7 Principles', 'of monastic wisdom'], ['ig', 'Show Up', 'Meditation and Prayer'], ['ge', 'Healthy Community', 'Community and Family'], ['co', 'Choose Love', 'Love is your purpose']]
-    ];
-    const flBox = document.getElementById('fls');
-    const flG = GR.map((g, gi) => g.map((d, si) => {
-      const [dx, dy, fr, bl] = SLOTS[si];
-      const el = document.createElement('div'); el.className = 'fl ' + (fr ? 'fr' : 'tr');
-      el.style.setProperty('--dx', dx); el.style.setProperty('--dy', dy); el.style.setProperty('--fl-d', (5 + ((gi + si) % 4) * .9) + 's');
-      el.dataset.bl = bl; el.dataset.p = [1, -.6, .7, -1][si];
-      const ic = d[0] === 'ring' ? '<span class="ic anelzinho"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.9" pathLength="100" class="a"/><circle cx="18" cy="18" r="15.9" pathLength="100" class="b"/></svg></span>' : '<span class="ic"><svg fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><use href="#' + ICO[d[0]] + '"/></svg></span>';
-      el.innerHTML = '<div class="in">' + ic + '<div><b>' + d[1] + '</b><small>' + d[2] + '</small></div></div>';
-      flBox.appendChild(el); return el;
-    }));
-    const fls = flG.flat();
-    const stg = document.querySelector('.show .stage');
-    const sr0 = stg.getBoundingClientRect();
-    fls.forEach(el => {
-      const r = el.getBoundingClientRect();
-      el._fx = (sr0.left + sr0.width / 2) - (r.left + r.width / 2);
-      el._fy = (sr0.top + sr0.height / 2) - (r.top + r.height / 2);
-    });
-    gsap.set(fls, { opacity: 0, scale: .8, filter: 'blur(6px)', x: (i, el) => el._fx, y: (i, el) => el._fy });
     gsap.set('.show .call', { opacity: 0 });
     /* pinos ancorados nos elementos reais da tela do app (filhos da .tela: giram junto com o celular) */
     const tela = fones.app.el.querySelector('.tela'), stage = document.querySelector('.show .stage');
-    const posEm = (el, raiz) => { let x = 0, y = 0; while (el && el !== raiz) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; } return { x, y }; };
     document.querySelectorAll('.show .call').forEach(c => {
       const sp = SplitText.create(c.querySelectorAll('h3, p'), { type: 'words', wordsClass: 'cw' }); c._w = sp.words;
       gsap.set(c._w, { opacity: 0, filter: 'blur(4px)', y: 6 });
-      const alvo = tela.querySelector(c.dataset.t); if (!alvo) return;
-      const p = posEm(alvo, tela), W = tela.offsetWidth, H = tela.offsetHeight;
-      const pin = document.createElement('i'); pin.className = 'pin';
-      pin.style.left = 'calc(' + (p.x / W * 100) + '% - 1.4cqw)'; pin.style.top = 'calc(' + (p.y / H * 100) + '% - 1.4cqw)';
-      pin.style.width = 'calc(' + (alvo.offsetWidth / W * 100) + '% + 2.8cqw)'; pin.style.height = 'calc(' + (alvo.offsetHeight / H * 100) + '% + 2.8cqw)';
-      tela.appendChild(pin); c._pin = pin;
     });
     gsap.to(fones.app.el, { y: -7, duration: 2.6, ease: 'sine.inOut', yoyo: true, repeat: -1 });
     showTL = gsap.timeline({
@@ -317,16 +282,6 @@
       .to(ap, { y: 0, rotationY: 0, rotationZ: 0, rotationX: 0, scale: 1, duration: 1.4, ease: 'power2.out' }, 2.2)
       .to('.show .halo', { opacity: 1, duration: 1.4, ease: 'sine.inOut' }, 2.6)
       .to('.show .prog', { opacity: 1, duration: .4 }, INTRO - .4);
-    /* a cada recurso o grupo anterior desfoca e sai e o novo salta da tela do celular, focando; todos derivam com a rolagem */
-    flG.forEach((grp, gi) => {
-      const tIn = gi === 0 ? INTRO - .2 : INTRO + gi * PASSO - .05;
-      grp.forEach((el, si) => {
-        const bl = +el.dataset.bl;
-        showTL.to(el, { x: 0, y: 0, scale: 1, opacity: 1, filter: 'blur(' + bl + 'px)', duration: 1.0, ease: 'sine.out' }, tIn + si * .2);
-        if (gi < 3) showTL.to(el, { opacity: 0, scale: .92, filter: 'blur(6px)', duration: .6, ease: 'sine.inOut' }, INTRO + (gi + 1) * PASSO - .6 + si * .05);
-        showTL.fromTo(el, { yPercent: 0 }, { yPercent: (+el.dataset.p) * -18, duration: PASSO + .4, ease: 'none', immediateRender: false }, INTRO + gi * PASSO - .1);
-      });
-    });
     grupos.forEach((g, i) => {
       const t0 = INTRO + i * PASSO;
       /* a cada recurso o celular da uma meia-volta no eixo: esquerda, direita, esquerda, direita */
@@ -335,9 +290,8 @@
       g.querySelectorAll('.call').forEach((c, k) => {
         const d = t0 + .2 + k * .5, dir = c.classList.contains('l') ? -1 : 1;
         showTL.fromTo(c, { opacity: 0, x: 10 * dir }, { opacity: 1, x: 0, duration: .7, ease: 'sine.out' }, d)
-          .to(c._w, { opacity: 1, filter: 'blur(0px)', y: 0, duration: .6, stagger: .03, ease: 'sine.out' }, d + .05)
-          .fromTo(c._pin, { opacity: 0, scale: .97 }, { opacity: 1, scale: 1, duration: 1.1, ease: 'sine.out' }, d + .3);
-        if (i < 3) showTL.to([c, c._pin], { opacity: 0, duration: .5, ease: 'sine.inOut' }, t0 + PASSO - .55).to(c._w, { opacity: 0, filter: 'blur(4px)', duration: .5 }, t0 + PASSO - .55);
+          .to(c._w, { opacity: 1, filter: 'blur(0px)', y: 0, duration: .6, stagger: .03, ease: 'sine.out' }, d + .05);
+        if (i < 3) showTL.to(c, { opacity: 0, duration: .5, ease: 'sine.inOut' }, t0 + PASSO - .55).to(c._w, { opacity: 0, filter: 'blur(4px)', duration: .5 }, t0 + PASSO - .55);
       });
     });
     showTL.to(ap, { rotationY: 0, rotationX: 0, rotationZ: 0, duration: 1, ease: 'sine.inOut' }, INTRO + 4 * PASSO - 1.1);
