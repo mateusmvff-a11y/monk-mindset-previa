@@ -201,10 +201,7 @@ h1,h2,h3{font-family:var(--f-tit);font-weight:600;color:var(--tinta);letter-spac
 
 /* ---------- problema: o feed infinito corre dos lados e se desfaz ---------- */
 .problema{position:relative;height:340svh}
-.problema .palco-p{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);align-items:center;gap:clamp(2rem,5vw,6rem);padding:0 clamp(8rem,17vw,19rem)}
-.problema .feed{position:absolute;top:0;width:clamp(8rem,11vw,12rem);display:flex;flex-direction:column;gap:1rem;will-change:transform,filter,opacity}
-.problema .f1{left:2%}
-.problema .f4{right:2%}
+.problema .palco-p{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);align-items:center;gap:clamp(2rem,5vw,6rem);padding:0 clamp(2rem,12vw,14rem)}
 .problema .miolo{position:relative;z-index:3;text-align:left}
 .problema .fecho{margin-top:1.8rem;font-size:clamp(1.1rem,1.5vw,1.4rem);color:var(--texto);max-width:24rem;opacity:0}
 .problema .leque-w{justify-self:center;width:min(100%,24rem);aspect-ratio:4/5;position:relative}
@@ -213,13 +210,6 @@ h1,h2,h3{font-family:var(--f-tit);font-weight:600;color:var(--tinta);letter-spac
 .problema .lc img{width:100%;height:100%;object-fit:cover}
 .problema h2{font-size:clamp(2.3rem,4.7vw,5.2rem);font-weight:500;line-height:1.04;letter-spacing:-.035em}
 .problema h2 .w{display:inline-block;opacity:.14}
-.post{border-radius:1.1rem;background:#fff;padding:.8rem;display:flex;flex-direction:column;gap:.5rem;box-shadow:0 .1rem .1rem rgba(27,42,51,.04)}
-.post .av{display:flex;gap:.5rem;align-items:center}
-.post .av b{width:1.6rem;height:1.6rem;border-radius:50%;flex:none}
-.post i{display:block;height:.5rem;border-radius:9px;background:#e4e1d7;width:76%}
-.post i:nth-child(3){width:50%}
-.post .im{border-radius:.8rem;width:100%}
-.post .nt{align-self:flex-end;min-width:1.5rem;height:1.5rem;padding:0 .4rem;border-radius:99px;background:#e0524b;color:#fff;font-size:.7rem;font-weight:700;display:grid;place-items:center}
 
 /* ---------- solucao: quadro escuro arredondado ---------- */
 .solucao{padding:0 var(--pad) clamp(4rem,8vw,7rem)}
@@ -385,8 +375,6 @@ h1,h2,h3{font-family:var(--f-tit);font-weight:600;color:var(--tinta);letter-spac
   .princ .pc{width:min(66vw,17rem)}
   .princ .abre{width:min(78vw,22rem)}
   .problema{height:300svh}
-  .problema .feed{width:24vw;opacity:.22}
-  .problema .f1{left:-9%}.problema .f4{right:-9%}
   .problema .palco-p{grid-template-columns:1fr;align-content:center;gap:1.4rem;padding:0 var(--pad)}
   .problema .leque-w{justify-self:center;width:min(58vw,15rem)}
   .problema .fecho{margin-top:1rem}
@@ -401,3 +389,19 @@ h1,h2,h3{font-family:var(--f-tit);font-weight:600;color:var(--tinta);letter-spac
   .rodape .logo{grid-column:1/-1}
 }
 @media (prefers-reduced-motion:reduce){}
+
+/* ---------- hover nos blocos de imagem (so o miolo e a sombra mexem; o bloco em si nao se desloca) ---------- */
+.quem figure img,.pc .arco img,.faz .lado .bg,.lc img,.final .cartao .bg{transition:transform 1s var(--ease)}
+.quem figure,.faz .lado,.final .cartao,.depo .faixa .ceu{transition:box-shadow .6s var(--ease)}
+.quem figure:hover img,.pc:hover .arco img,.faz .lado:hover .bg,.lc:hover img,.final .cartao:hover .bg{transform:scale(1.07)}
+.quem figure:hover,.faz .lado:hover,.final .cartao:hover{box-shadow:0 1.8rem 3.6rem rgba(27,42,51,.2)}
+.quem figure .chip,.quem figure:hover .chip{transition:background .4s,box-shadow .4s}
+.quem figure:hover .chip{background:#fff;box-shadow:0 .8rem 2rem rgba(27,42,51,.2)}
+.pc .nn,.pc h3,.pc small{transition:color .4s}
+.pc:hover .nn,.pc:hover h3{color:var(--azul)}
+.depo blockquote{transition:background .45s var(--ease),box-shadow .45s var(--ease)}
+.depo blockquote:hover{background:#fff;box-shadow:0 1.4rem 3rem rgba(27,42,51,.12)}
+.depo blockquote cite{transition:color .3s}
+.faz .redes a,.rodape a{transition:background .25s,color .25s}
+.final .cartao .bg,.faz .lado .bg{will-change:transform}
+@media (hover:none){.quem figure:hover img,.pc:hover .arco img,.faz .lado:hover .bg,.final .cartao:hover .bg{transform:none}}

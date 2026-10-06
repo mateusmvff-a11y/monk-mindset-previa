@@ -174,23 +174,8 @@
       .fromTo('.hero .piso', { opacity: 0 }, { opacity: 1, duration: .3 }, .75)
   }
 
-  /* ---------- problema: feed infinito que corre dos lados e se desfaz na paz ---------- */
-  const PASTEIS = ['#f3c9c0', '#c8d8e6', '#f1e1b3', '#cfe0c6', '#e2cbe6', '#f2d3b0', '#c9dde0'];
-  document.querySelectorAll('.problema .feed').forEach((feed, fi) => {
-    let html = '';
-    for (let i = 0; i < 16; i++) {
-      const k = (i * 5 + fi * 3) % PASTEIS.length, alto = [5.5, 8, 11, 6.5, 9.5][(i + fi) % 5];
-      const nt = (i + fi) % 3 === 0 ? `<span class="nt">${['9+', '3', '12', '99+', '5'][(i + fi) % 5]}</span>` : '';
-      html += `<div class="post"><div class="av"><b style="background:${PASTEIS[(k + 2) % PASTEIS.length]}"></b><i style="width:${34 + (i * 11) % 30}%"></i></div><div class="im" style="height:${alto}rem;background:${PASTEIS[k]}"></div><i></i><i></i>${nt}</div>`;
-    }
-    feed.innerHTML = html + html;
-  });
+  /* ---------- problema: leque de cartas que troca na rolagem ---------- */
   if (!reduz) {
-    const pt = { trigger: '.problema', start: 'top bottom', end: 'bottom top', scrub: .5 };
-    [['.f1', -1], ['.f4', 1]].forEach(([sel, dir]) => {
-      const el = document.querySelector('.problema ' + sel);
-      gsap.fromTo(el, { yPercent: dir < 0 ? 0 : -50 }, { yPercent: dir < 0 ? -50 : 0, ease: 'none', scrollTrigger: pt });
-    });
     /* leque de cartas (referencia: Flick Cards Slider): a carta da frente sai e a proxima gira para o centro conforme a rolagem */
     const lcs = [...document.querySelectorAll('.problema .lc')], N = lcs.length;
     const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
@@ -212,7 +197,7 @@
         leque(clamp((P - .08) / .54) * (N - 1));
         /* no fim a paz chega: feed e cartas perdem nitidez e somem, e entra a frase final */
         const q = clamp((P - .74) / .16);
-        gsap.set(['.problema .feed', '.problema .leque-w'], { opacity: 1 - q, filter: q ? `blur(${(q * 12).toFixed(1)}px)` : 'none' });
+        gsap.set(['.problema .leque-w'], { opacity: 1 - q, filter: q ? `blur(${(q * 12).toFixed(1)}px)` : 'none' });
         const f = clamp((P - .86) / .1);
         gsap.set('.problema .fecho', { opacity: f, y: (1 - f) * 14 });
       }
