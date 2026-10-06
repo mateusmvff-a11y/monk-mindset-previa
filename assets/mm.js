@@ -143,7 +143,7 @@
   const titulo = document.querySelector('#hero .titulo');
   if (!reduz) {
     const sp = SplitText.create(titulo.querySelectorAll('span'), { type: 'chars', charsClass: 'ch' });
-    const ZOOM = innerWidth < 900 ? 1.6 : 1.65;
+    const ZOOM = innerWidth < 900 ? 1.35 : 1.4;
     /* entrada (referencia Frostbound): a nevoa se abre. O fundo comeca lavado e dessaturado e ganha cor e nitidez;
        as letras do titulo saem do desfoque uma a uma; depois entram a barra, o subtitulo e o botao */
     const fotos = [cena.querySelector('.fundo'), frente];
@@ -167,7 +167,9 @@
       .to(titulo, { y: () => innerHeight * .7, duration: .9 }, 0)
       .to('#hero .base', { opacity: 0, y: -30, duration: .25 }, 0)
       /* no fim do zoom out a nevoa sobe do chao e leva para a proxima secao */
-      .fromTo('#nevoa', { opacity: 0, yPercent: 38 }, { opacity: 1, yPercent: 0, ease: 'power1.out', duration: .5 }, .5);
+      .fromTo('.hero .nv1', { opacity: 0, y: 160 }, { opacity: 1, y: 0, ease: 'power1.out', duration: .55 }, .42)
+      .fromTo('.hero .nv2', { opacity: 0, y: 220, x: 60 }, { opacity: .8, y: 0, x: -30, ease: 'power1.out', duration: .6 }, .5)
+      .fromTo('.hero .piso', { opacity: 0 }, { opacity: 1, duration: .3 }, .75)
   }
 
   /* ---------- problema: feed infinito que corre dos lados e se desfaz na paz ---------- */
