@@ -476,3 +476,15 @@ h1,h2,h3{font-family:var(--f-tit);font-weight:600;color:var(--tinta);letter-spac
 /* quebras de linha sem palavra sozinha: titulos equilibrados, paragrafos sem orfa */
 h1,h2,h3,.problema .fecho{text-wrap:balance}
 p,li,blockquote{text-wrap:pretty}
+
+/* mobile, primeira secao: titulo alinhado a esquerda (sem piramide) e subtitulo legivel */
+@media (max-width:900px){
+  .hero{--tf:clamp(2.8rem,13.6vw,5rem)}
+  .hero .titulo{text-align:left;top:14svh;font-size:var(--tf);line-height:.98}
+  .hero .lede{left:0;right:auto;margin:0;max-width:20rem;white-space:normal;text-align:left;text-wrap:balance;padding-inline:var(--pad);font-size:1.18rem;line-height:1.38;top:calc(14svh + var(--tf) * 2 * .98 + 1.1rem)}
+}
+/* colunas de texto do celular: mesma largura em todos os recursos */
+@media (min-width:901px){
+  .show .call p{max-width:none}
+  .show .call h3{max-width:none}
+}
