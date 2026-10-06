@@ -83,8 +83,10 @@
       },
       prog(){
         const anel = q('.s-prog .anel .v'), bars = q('.s-prog .barras i'), n1 = q('.s-prog .n1')[0], n2 = q('.s-prog .n2')[0];
-        const o = { a: 0, b: 0 };
-        const set = () => { n1.textContent = Math.round(o.a) + 'h'; n2.textContent = Math.round(o.b); };
+        const o = { a: 0, b: 0, c: 0, d: 0 };
+        const sd = q('.s-prog .anel strong')[0], pc = q('.s-prog .meta2 span')[0], br = q('.s-prog .meta2 .br i');
+        const set = () => { n1.textContent = Math.round(o.a) + 'h'; n2.textContent = Math.round(o.b); sd.textContent = Math.round(o.c); pc.textContent = Math.round(o.d) + '%'; };
+        gsap.set(br, { width: '0%' });
         gsap.set(anel, { strokeDashoffset: 100 });
         gsap.set(bars, { height: 0 });
         set();
@@ -92,9 +94,10 @@
         t.to(anel, { strokeDashoffset: 14, duration: 1.6, ease: 'power3.out' })
          .to(bars, { height: i => 0, duration: 0 }, 0)
          .to(bars, { height: (i, el) => el.dataset.h, duration: .9, stagger: .09, ease: 'power3.out' }, .25)
-         .to(o, { a: 18, b: 142, duration: 1.8, ease: 'power2.out', onUpdate: set }, .3)
+         .to(o, { a: 18, b: 142, c: 12, d: 86, duration: 2, ease: 'power2.out', onUpdate: set }, .3)
+         .to(br, { width: '86%', duration: 2, ease: 'power2.out' }, .3)
          .to({}, { duration: 2.2 })
-         .set(o, { a: 0, b: 0 }).call(set).set(bars, { height: 0 }).set(anel, { strokeDashoffset: 100 });
+         .set(o, { a: 0, b: 0, c: 0, d: 0 }).set(br, { width: '0%' }).call(set).set(bars, { height: 0 }).set(anel, { strokeDashoffset: 100 });
         return t;
       },
       bib(){
@@ -177,7 +180,7 @@
       .to({}, { duration: .1 }, .9)
       .to([titulo, '#lede'], { y: () => innerHeight * .85, duration: .4, ease: 'power1.in' }, 1.0)
       /* saida = inverso da entrada: o texto fica enevoado e desfocado enquanto desce atras da montanha */
-      .to([titulo, '#lede'], { filter: 'blur(16px)', opacity: .15, duration: .4, ease: 'power1.in' }, 1.0)
+      .to([titulo, '#lede'], { filter: 'blur(42px)', opacity: .08, duration: .4, ease: 'power1.in' }, 1.0)
       .to(titulo, { letterSpacing: '.02em', duration: .4, ease: 'power1.in' }, 1.0);
   }
 
@@ -253,6 +256,15 @@
     const mSplit = SplitText.create('.show .manchete', { type: 'words', wordsClass: 'mw' });
     gsap.set(mSplit.words, { opacity: 0, filter: 'blur(16px)', y: 10 });
     gsap.set('.show .prog', { opacity: 0 });
+    const fls = [...document.querySelectorAll('.show .fl')];
+    const stg = document.querySelector('.show .stage');
+    const sr0 = stg.getBoundingClientRect();
+    fls.forEach(el => {
+      const r = el.getBoundingClientRect();
+      el._fx = (sr0.left + sr0.width / 2) - (r.left + r.width / 2);
+      el._fy = (sr0.top + sr0.height / 2) - (r.top + r.height / 2);
+    });
+    gsap.set(fls, { opacity: 0, scale: .3, x: (i, el) => el._fx, y: (i, el) => el._fy });
     gsap.set('.show .call', { opacity: 0 });
     gsap.set('.show .ln b', { scaleX: 0 });
     /* pinos ancorados nos elementos reais da tela do app (filhos da .tela: giram junto com o celular) */
@@ -302,6 +314,11 @@
       .to(ap, { y: 0, rotationY: 0, rotationZ: 0, rotationX: 0, scale: 1, duration: 1.4, ease: 'power2.out' }, 2.2)
       .to('.show .halo', { opacity: 1, duration: .6 }, 2.8)
       .to('.show .prog', { opacity: 1, duration: .4 }, INTRO - .4);
+    /* itens do app saltam da tela do celular, em profundidade (os de tras desfocados), e derivam com a rolagem */
+    fls.forEach((el, i) => {
+      showTL.to(el, { x: 0, y: 0, scale: +el.dataset.s || 1, opacity: 1, duration: .75, ease: 'back.out(1.5)' }, INTRO - .2 + i * .14);
+      showTL.to(el, { yPercent: (+el.dataset.p || 0) * -60, duration: 4 * PASSO, ease: 'none' }, INTRO);
+    });
     grupos.forEach((g, i) => {
       const t0 = INTRO + i * PASSO;
       /* a cada recurso o celular da uma meia-volta no eixo: esquerda, direita, esquerda, direita */
