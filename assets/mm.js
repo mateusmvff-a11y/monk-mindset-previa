@@ -139,7 +139,8 @@
   /* ---------- hero: a cena. A rolagem prende a tela, faz o zoom out e o titulo desce atras das colinas ---------- */
   const cena = document.getElementById('cena');
   const frente = document.getElementById('frente');
-  const camadas = [cena, frente];
+  const sol = document.getElementById('sol');
+  const camadas = [cena, frente, sol];
   const titulo = document.querySelector('#hero .titulo');
   if (!reduz) {
     const sp = SplitText.create(titulo.querySelectorAll('span'), { type: 'chars', charsClass: 'ch' });
@@ -160,6 +161,7 @@
       .to(sp.chars, { opacity: 1, filter: 'blur(0px)', scale: 1, duration: 1.4, stagger: .07 }, .5)
       .to(titulo, { letterSpacing: '-.045em', duration: 2.6, ease: 'power3.out' }, .5)
       .to('#hero .base > *', { opacity: 1, y: 0, duration: 1, stagger: .14 }, 1.9)
+      .fromTo('.hero .nv3', { opacity: .9, y: 0 }, { opacity: 0, y: 90, duration: 2.6, ease: 'power2.inOut' }, .3)
       .set(fotos, { clearProps: 'filter' }, 2.9);
 
     const zo = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: '#hero', start: 'top top', end: '+=125%', pin: true, scrub: .7, anticipatePin: 1, refreshPriority: 3 } });
