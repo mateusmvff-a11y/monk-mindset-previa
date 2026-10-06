@@ -352,17 +352,22 @@ h1,h2,h3{font-family:var(--f-tit);font-weight:600;color:var(--tinta);letter-spac
   .hero .ios .tx small{display:none}
   .quem .grade{grid-template-columns:1fr}
   .quem .t1{margin-bottom:-2rem}.quem .t2{margin-top:-2rem}
-  .show .stage{--pw:min(12.5rem,25svh);--gap:0rem;min-height:34rem}
+  .show .stage{--pw:min(14rem,calc((100svh - 19.7rem) / 2.108));--gap:0rem;min-height:34rem}
   .show .topo-s{display:none}
   .show .manchete{font-size:clamp(1.7rem,7.2vw,2.5rem)}
-  .show .aparelho{top:35%}
-  .show .halo{top:35%;width:calc(var(--pw) * 1.8)}
-  .show .cj{inset:auto 0 1.4rem 0;padding-inline:var(--pad);display:grid;gap:.8rem}
+  .show .aparelho{top:calc(6.2rem + var(--ph) / 2)}
+  .show .halo{top:calc(6.2rem + var(--ph) * .3);height:auto;width:100%}
+  .fone .pin{display:none}
+  .show .cj{inset:auto 0 1.2rem 0;padding-inline:var(--pad);display:grid;gap:.6rem}
+  .show .call .n{margin-bottom:.25rem}
+  .show .call p{font-size:.92rem;line-height:1.38;margin-top:.4rem}
   .show .call,.show .call.l{position:static;transform:none;width:auto;text-align:left}
   .show .call .ln{display:none}
-  .show .call h3{font-size:1.35rem}
+  .show .call h3{font-size:1.25rem}
   .faz .duas{grid-template-columns:1fr}
   .faz .lado{min-height:30rem}
+  .faz .lado.media::after{background:linear-gradient(rgba(14,22,28,0) 12%,rgba(14,22,28,.72) 48%,rgba(14,22,28,.9))}
+  .faz .lado.tech::before{background:linear-gradient(180deg,rgba(18,32,42,.92) 0%,rgba(18,32,42,.78) 48%,rgba(18,32,42,.3) 66%,rgba(18,32,42,0) 82%)}
   .faz .lado.tech{min-height:0;padding-bottom:0}
   .faz .lado.tech .fone{position:relative;right:auto;bottom:auto;margin:1.4rem auto -9rem;--fw:12rem}
   .princ .trilho{padding-top:5rem}
@@ -372,7 +377,9 @@ h1,h2,h3{font-family:var(--f-tit);font-weight:600;color:var(--tinta);letter-spac
   .problema .palco-p{grid-template-columns:1fr;align-content:center;gap:1.4rem;padding:0 var(--pad)}
   .problema .leque-w{justify-self:center;width:min(58vw,15rem)}
   .problema .fecho{margin-top:1rem}
-  .show .prog{bottom:auto;top:5.4rem}
+  .show .prog{bottom:auto;top:4.7rem}
+  .show .prog .ct{display:none}
+  .show .prog button{width:2.2rem}
   .depo .tres{grid-template-columns:1fr}
   .depo blockquote{min-height:0}
   .depo .faixa{aspect-ratio:auto;height:22rem}
