@@ -92,8 +92,8 @@ h1,h2,h3{font-family:var(--f-tit);font-weight:600;color:var(--tinta);letter-spac
 .fone .aro::before{content:"";position:absolute;inset:.45cqw;border-radius:14.5cqw;background:#0b0d0f}
 .fone .tela{position:absolute;inset:2.6cqw;border-radius:12.4cqw;overflow:hidden;background:var(--papel);container-type:inline-size;color:var(--tinta);font-family:var(--f-txt)}
 .tela .ilha2{position:absolute;z-index:9;top:2.8cqw;left:50%;width:29cqw;height:8.4cqw;margin-left:-14.5cqw;border-radius:99px;background:#000}
-.tela .s{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .55s var(--ease),visibility 0s .55s;background:var(--papel)}
-.tela .s.on{opacity:1;visibility:visible;transition:opacity .55s var(--ease)}
+.tela .s{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity 1s ease,visibility 0s 1s;background:var(--papel)}
+.tela .s.on{opacity:1;visibility:visible;transition:opacity 1s ease}
 .tela .sb{position:absolute;inset:3.4cqw 6.5cqw auto 7.5cqw;display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:4.1cqw;z-index:8}
 .tela .sb svg{height:3.2cqw;width:auto;fill:currentColor}
 .tela .sb span{display:flex;gap:1.6cqw;align-items:center}
@@ -425,8 +425,8 @@ h1,h2,h3{font-family:var(--f-tit);font-weight:600;color:var(--tinta);letter-spac
 .show .call.r .ln b{background:linear-gradient(270deg,var(--tinta),var(--azul))}
 
 /* reflexo que varre a tela do app a cada troca de tela */
-.tela .glare{position:absolute;inset:0;z-index:11;pointer-events:none;opacity:0;background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.55) 50%,transparent 62%);transform:translateX(-70%)}
-.tela .glare.go{animation:varre 1.15s var(--ease)}
+.tela .glare{position:absolute;inset:0;z-index:11;pointer-events:none;opacity:0;background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.28) 50%,transparent 62%);transform:translateX(-70%)}
+.tela .glare.go{animation:varre 2.4s ease-in-out}
 @keyframes varre{0%{transform:translateX(-70%);opacity:1}100%{transform:translateX(70%);opacity:0}}
 
 /* itens do app flutuando em profundidade ao redor do celular */
@@ -434,7 +434,7 @@ h1,h2,h3{font-family:var(--f-tit);font-weight:600;color:var(--tinta);letter-spac
 .show .fl{position:absolute;left:calc(50% + var(--dx) * var(--pw));top:calc(50% + var(--dy) * var(--ph));translate:-50% -50%;will-change:transform}
 .show .fl.fr{z-index:5}
 .show .fl.tr{z-index:2}
-.show .fl .in{display:flex;align-items:center;gap:.7rem;padding:.7rem 1rem .7rem .7rem;border-radius:1.2rem;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);box-shadow:0 1.2rem 2.6rem rgba(27,42,51,.16),0 0 0 1px rgba(255,255,255,.7) inset;animation:flutua var(--fl-d,6s) ease-in-out infinite alternate;white-space:nowrap}
+.show .fl .in{display:flex;align-items:center;gap:.7rem;padding:.7rem 1rem .7rem .7rem;border-radius:1.2rem;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);box-shadow:0 1.2rem 2.6rem rgba(27,42,51,.16),0 0 0 1px rgba(255,255,255,.7) inset;animation:flutua calc(var(--fl-d,6s) * 1.6) ease-in-out infinite alternate;white-space:nowrap}
 .show .fl .ic{display:grid;place-items:center;width:2.3rem;height:2.3rem;border-radius:.8rem;background:#e9e5db;color:var(--azul)}
 .show .fl .ic svg{width:1.2rem;height:1.2rem}
 .show .fl b{display:block;font-family:var(--f-tit);font-weight:600;font-size:.88rem;color:var(--tinta);line-height:1.1}
@@ -442,7 +442,7 @@ h1,h2,h3{font-family:var(--f-tit);font-weight:600;color:var(--tinta);letter-spac
 .show .fl .anelzinho svg{transform:rotate(-90deg)}
 .show .fl .anelzinho circle{fill:none;stroke-width:5;stroke-linecap:round}
 .show .fl .anelzinho .a{stroke:#d9d4c7}.show .fl .anelzinho .b{stroke:var(--azul);stroke-dasharray:100;stroke-dashoffset:14}
-@keyframes flutua{from{transform:translateY(-6px) rotate(-.6deg)}to{transform:translateY(7px) rotate(.6deg)}}
+@keyframes flutua{from{transform:translateY(-4px)}to{transform:translateY(5px)}}
 @media (max-width:900px){.show .fls{display:none}}
 @media (prefers-reduced-motion:reduce){.show .fl .in{animation:none}}
 

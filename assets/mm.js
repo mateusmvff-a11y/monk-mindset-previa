@@ -245,7 +245,7 @@
     ct.textContent = '0' + (k + 1);
     fones.app.mostra(nomes[k]);
   }
-  const INTRO = 3.6, PASSO = 1.5;
+  const INTRO = 3.6, PASSO = 2.3;
   let showTL = null;
   const ap = document.getElementById('aparelho');
   gsap.set(ap, { xPercent: -50, yPercent: -50 });
@@ -283,14 +283,14 @@
       el._fx = (sr0.left + sr0.width / 2) - (r.left + r.width / 2);
       el._fy = (sr0.top + sr0.height / 2) - (r.top + r.height / 2);
     });
-    gsap.set(fls, { opacity: 0, scale: .4, filter: 'blur(14px)', x: (i, el) => el._fx, y: (i, el) => el._fy });
+    gsap.set(fls, { opacity: 0, scale: .8, filter: 'blur(6px)', x: (i, el) => el._fx, y: (i, el) => el._fy });
     gsap.set('.show .call', { opacity: 0 });
     /* pinos ancorados nos elementos reais da tela do app (filhos da .tela: giram junto com o celular) */
     const tela = fones.app.el.querySelector('.tela'), stage = document.querySelector('.show .stage');
     const posEm = (el, raiz) => { let x = 0, y = 0; while (el && el !== raiz) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; } return { x, y }; };
     document.querySelectorAll('.show .call').forEach(c => {
       const sp = SplitText.create(c.querySelectorAll('h3, p'), { type: 'words', wordsClass: 'cw' }); c._w = sp.words;
-      gsap.set(c._w, { opacity: 0, filter: 'blur(10px)', y: 8 });
+      gsap.set(c._w, { opacity: 0, filter: 'blur(4px)', y: 6 });
       const alvo = tela.querySelector(c.dataset.t); if (!alvo) return;
       const p = posEm(alvo, tela), W = tela.offsetWidth, H = tela.offsetHeight;
       const esq = c.classList.contains('l');
@@ -322,7 +322,7 @@
     showTL = gsap.timeline({
       defaults: { ease: 'none' },
       scrollTrigger: {
-        trigger: '#app', start: 'top top', end: '+=720%', pin: true, scrub: .6, anticipatePin: 1, refreshPriority: 2,
+        trigger: '#app', start: 'top top', end: '+=900%', pin: true, scrub: .6, anticipatePin: 1, refreshPriority: 2,
         onUpdate: self => {
           const t = self.progress * showTL.duration();
           ativa(t < INTRO ? -1 : Math.min(3, Math.floor((t - INTRO) / PASSO)));
@@ -335,33 +335,33 @@
       /* 2) o texto se dissolve e o celular sobe inclinado */
       .to(mSplit.words, { opacity: 0, filter: 'blur(10px)', duration: .5, stagger: .015 }, 2.2)
       .to(ap, { y: 0, rotationY: 0, rotationZ: 0, rotationX: 0, scale: 1, duration: 1.4, ease: 'power2.out' }, 2.2)
-      .to('.show .halo', { opacity: 1, duration: .6 }, 2.8)
+      .to('.show .halo', { opacity: 1, duration: 1.4, ease: 'sine.inOut' }, 2.6)
       .to('.show .prog', { opacity: 1, duration: .4 }, INTRO - .4);
     /* a cada recurso o grupo anterior desfoca e sai e o novo salta da tela do celular, focando; todos derivam com a rolagem */
     flG.forEach((grp, gi) => {
       const tIn = gi === 0 ? INTRO - .2 : INTRO + gi * PASSO - .05;
       grp.forEach((el, si) => {
         const bl = +el.dataset.bl;
-        showTL.to(el, { x: 0, y: 0, scale: 1, opacity: 1, filter: 'blur(' + bl + 'px)', duration: .7, ease: 'back.out(1.5)' }, tIn + si * .1);
-        if (gi < 3) showTL.to(el, { opacity: 0, scale: .82, filter: 'blur(16px)', duration: .3, ease: 'power2.in' }, INTRO + (gi + 1) * PASSO - .38 + si * .03);
-        showTL.fromTo(el, { yPercent: 0 }, { yPercent: (+el.dataset.p) * -34, duration: PASSO + .4, ease: 'none', immediateRender: false }, INTRO + gi * PASSO - .1);
+        showTL.to(el, { x: 0, y: 0, scale: 1, opacity: 1, filter: 'blur(' + bl + 'px)', duration: 1.4, ease: 'sine.out' }, tIn + si * .28);
+        if (gi < 3) showTL.to(el, { opacity: 0, scale: .92, filter: 'blur(6px)', duration: .8, ease: 'sine.inOut' }, INTRO + (gi + 1) * PASSO - .9 + si * .08);
+        showTL.fromTo(el, { yPercent: 0 }, { yPercent: (+el.dataset.p) * -18, duration: PASSO + .4, ease: 'none', immediateRender: false }, INTRO + gi * PASSO - .1);
       });
     });
     grupos.forEach((g, i) => {
       const t0 = INTRO + i * PASSO;
       /* a cada recurso o celular da uma meia-volta no eixo: esquerda, direita, esquerda, direita */
-      const giro = i % 2 === 0 ? -14 : 14;
-      showTL.to(ap, { rotationY: giro, rotationX: 5, rotationZ: -giro * .1, duration: .75, ease: 'power2.inOut' }, t0 - .05);
+      const giro = i % 2 === 0 ? -12 : 12;
+      showTL.to(ap, { rotationY: giro, rotationX: 4, rotationZ: -giro * .1, duration: 1.6, ease: 'sine.inOut' }, t0 - .1);
       g.querySelectorAll('.call').forEach((c, k) => {
-        const d = t0 + .15 + k * .25, dir = c.classList.contains('l') ? -1 : 1;
-        showTL.fromTo(c, { opacity: 0, x: 22 * dir }, { opacity: 1, x: 0, duration: .3 }, d)
-          .to(c._w, { opacity: 1, filter: 'blur(0px)', y: 0, duration: .3, stagger: .022 }, d + .05)
-          .fromTo(c._path, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: .55, ease: 'power2.inOut' }, d + .05)
-          .fromTo(c._pin, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: .3, ease: 'back.out(2)', onStart: () => { c._pin._on = true; }, onReverseComplete: () => { c._pin._on = false; } }, d + .45);
-        if (i < 3) showTL.to([c, c._pin], { opacity: 0, duration: .25 }, t0 + PASSO - .3).to(c._path, { strokeDashoffset: -1, duration: .3, ease: 'power2.in', onComplete: () => { c._pin._on = false; } }, t0 + PASSO - .3).to(c._w, { opacity: 0, filter: 'blur(8px)', duration: .25 }, t0 + PASSO - .3);
+        const d = t0 + .3 + k * .45, dir = c.classList.contains('l') ? -1 : 1;
+        showTL.fromTo(c, { opacity: 0, x: 10 * dir }, { opacity: 1, x: 0, duration: .9, ease: 'sine.out' }, d)
+          .to(c._w, { opacity: 1, filter: 'blur(0px)', y: 0, duration: .8, stagger: .04, ease: 'sine.out' }, d + .1)
+          .fromTo(c._path, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.2, ease: 'sine.inOut' }, d + .1)
+          .fromTo(c._pin, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: .8, ease: 'sine.out', onStart: () => { c._pin._on = true; }, onReverseComplete: () => { c._pin._on = false; } }, d + .9);
+        if (i < 3) showTL.to([c, c._pin], { opacity: 0, duration: .6, ease: 'sine.inOut' }, t0 + PASSO - .75).to(c._path, { strokeDashoffset: -1, duration: .7, ease: 'sine.inOut', onComplete: () => { c._pin._on = false; } }, t0 + PASSO - .75).to(c._w, { opacity: 0, filter: 'blur(4px)', duration: .6 }, t0 + PASSO - .75);
       });
     });
-    showTL.to(ap, { rotationY: 0, rotationX: 0, rotationZ: 0, duration: .5, ease: 'power2.inOut' }, INTRO + 4 * PASSO - .55);
+    showTL.to(ap, { rotationY: 0, rotationX: 0, rotationZ: 0, duration: 1, ease: 'sine.inOut' }, INTRO + 4 * PASSO - 1.1);
     showTL.to({}, { duration: .01 }, INTRO + 4 * PASSO - .01);
   }
   dots.forEach((b, i) => b.addEventListener('click', () => {
