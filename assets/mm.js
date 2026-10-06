@@ -23,10 +23,11 @@
     el.appendChild(tpl.content.cloneNode(true));
     const q = gsap.utils.selector(el);
     const telas = {};
+    const glare = document.createElement('i'); glare.className = 'glare'; el.querySelector('.tela').appendChild(glare);
     el.querySelectorAll('.s').forEach(s => telas[s.dataset.s] = s);
     let atual = null, tl = null, visivel = true;
 
-    gsap.set(q('.s-sem .add'), { xPercent: -50 });
+    
     gsap.set(q('.folha'), { autoAlpha: 1, yPercent: 105 });
 
     const fabricas = {
@@ -116,6 +117,7 @@
       atual = nome;
       if (tl) tl.kill();
       Object.entries(telas).forEach(([k, s]) => s.classList.toggle('on', k === nome));
+      glare.classList.remove('go'); void glare.offsetWidth; glare.classList.add('go');
       tl = fabricas[nome]();
       if (reduz) tl.progress(.55).pause();
       else if (!visivel) tl.pause();
@@ -173,7 +175,10 @@
       .to(lede.words, { opacity: 1, filter: 'blur(0px)', y: 0, duration: .2, stagger: .045 }, .06)
       .to(lede.words.slice(-3), { fontWeight: 800, color: '#0f2a42', duration: .2, stagger: .05 }, .5)
       .to({}, { duration: .1 }, .9)
-      .to([titulo, '#lede'], { y: () => innerHeight * .85, duration: .4, ease: 'power1.in' }, 1.0);
+      .to([titulo, '#lede'], { y: () => innerHeight * .85, duration: .4, ease: 'power1.in' }, 1.0)
+      /* saida = inverso da entrada: o texto fica enevoado e desfocado enquanto desce atras da montanha */
+      .to([titulo, '#lede'], { filter: 'blur(16px)', opacity: .15, duration: .4, ease: 'power1.in' }, 1.0)
+      .to(titulo, { letterSpacing: '.02em', duration: .4, ease: 'power1.in' }, 1.0);
   }
 
   /* ---------- problema: leque de cartas que troca na rolagem ---------- */
@@ -250,7 +255,34 @@
     gsap.set('.show .prog', { opacity: 0 });
     gsap.set('.show .call', { opacity: 0 });
     gsap.set('.show .ln b', { scaleX: 0 });
-    gsap.set('.show .ln em', { scale: 0 });
+    /* pinos ancorados nos elementos reais da tela do app (filhos da .tela: giram junto com o celular) */
+    const tela = fones.app.el.querySelector('.tela'), stage = document.querySelector('.show .stage');
+    const posEm = (el, raiz) => { let x = 0, y = 0; while (el && el !== raiz) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; } return { x, y }; };
+    document.querySelectorAll('.show .call').forEach(c => {
+      const sp = SplitText.create(c.querySelectorAll('h3, p'), { type: 'words', wordsClass: 'cw' }); c._w = sp.words;
+      gsap.set(c._w, { opacity: 0, filter: 'blur(10px)', y: 8 });
+      const alvo = tela.querySelector(c.dataset.t); if (!alvo) return;
+      const p = posEm(alvo, tela), W = tela.offsetWidth, H = tela.offsetHeight;
+      const esq = c.classList.contains('l');
+      const pin = document.createElement('i'); pin.className = 'pin';
+      pin.style.left = ((p.x + alvo.offsetWidth * (esq ? .14 : .86)) / W * 100) + '%';
+      pin.style.top = ((p.y + alvo.offsetHeight / 2) / H * 100) + '%';
+      tela.appendChild(pin); c._pin = pin;
+    });
+    /* cada anotacao se alinha na altura do seu alvo e a linha vai ate o pino, mesmo com o celular girando */
+    const alinha = () => {
+      if (passoAtual < 0 || !grupos[passoAtual]) return;
+      const sr = stage.getBoundingClientRect();
+      grupos[passoAtual].querySelectorAll('.call').forEach(c => {
+        if (!c._pin) return;
+        const pr = c._pin.getBoundingClientRect(), cr = c.getBoundingClientRect();
+        const px = pr.left + pr.width / 2, py = pr.top + pr.height / 2;
+        c.style.top = (py - sr.top) + 'px';
+        const d = c.classList.contains('l') ? px - cr.right : cr.left - px;
+        c.querySelector('.ln').style.width = Math.max(12, d) + 'px';
+      });
+    };
+    gsap.to(fones.app.el, { y: -7, duration: 2.6, ease: 'sine.inOut', yoyo: true, repeat: -1 });
     showTL = gsap.timeline({
       defaults: { ease: 'none' },
       scrollTrigger: {
@@ -259,6 +291,7 @@
           const t = self.progress * showTL.duration();
           ativa(t < INTRO ? -1 : Math.min(3, Math.floor((t - INTRO) / PASSO)));
           dots.forEach((b, n) => gsap.set(b.firstElementChild, { scaleX: Math.min(1, Math.max(0, (t - INTRO - n * PASSO) / PASSO)) }));
+          alinha();
         }
       }
     });
@@ -272,14 +305,15 @@
     grupos.forEach((g, i) => {
       const t0 = INTRO + i * PASSO;
       /* a cada recurso o celular da uma meia-volta no eixo: esquerda, direita, esquerda, direita */
-      const giro = i % 2 === 0 ? -20 : 20;
+      const giro = i % 2 === 0 ? -14 : 14;
       showTL.to(ap, { rotationY: giro, rotationX: 5, rotationZ: -giro * .1, duration: .75, ease: 'power2.inOut' }, t0 - .05);
       g.querySelectorAll('.call').forEach((c, k) => {
         const d = t0 + .15 + k * .25, dir = c.classList.contains('l') ? -1 : 1;
         showTL.fromTo(c, { opacity: 0, x: 22 * dir }, { opacity: 1, x: 0, duration: .3 }, d)
+          .to(c._w, { opacity: 1, filter: 'blur(0px)', y: 0, duration: .3, stagger: .022 }, d + .05)
           .fromTo(c.querySelector('.ln b'), { scaleX: 0 }, { scaleX: 1, duration: .35 }, d + .1)
-          .fromTo(c.querySelector('.ln em'), { scale: 0 }, { scale: 1, duration: .2 }, d + .38);
-        if (i < 3) showTL.to(c, { opacity: 0, duration: .25 }, t0 + PASSO - .3);
+          .fromTo(c._pin, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: .25, ease: 'back.out(2)' }, d + .3);
+        if (i < 3) showTL.to([c, c._pin], { opacity: 0, duration: .25 }, t0 + PASSO - .3).to(c._w, { opacity: 0, filter: 'blur(8px)', duration: .25 }, t0 + PASSO - .3);
       });
     });
     showTL.to(ap, { rotationY: 0, rotationX: 0, rotationZ: 0, duration: .5, ease: 'power2.inOut' }, INTRO + 4 * PASSO - .55);

@@ -123,12 +123,12 @@ h1,h2,h3{font-family:var(--f-tit);font-weight:600;color:var(--tinta);letter-spac
 .s-sem .ck.ok svg{stroke:#fff}
 .s-sem .mais{font-size:4.6cqw;color:#98a4a9;letter-spacing:.1em;line-height:1}
 .s-sem li.extra{display:none}
-.s-sem .add{position:absolute;left:50%;bottom:23cqw;padding:3.2cqw 6.2cqw;border-radius:99px;background:var(--azul);color:#fff;font-size:3.9cqw;font-weight:600;white-space:nowrap;display:flex;gap:2cqw;align-items:center}
+.s-sem .add{position:absolute;left:0;right:0;margin-inline:auto;width:fit-content;bottom:23cqw;padding:3.2cqw 6.2cqw;border-radius:99px;background:var(--azul);color:#fff;font-size:3.9cqw;font-weight:600;white-space:nowrap;display:flex;gap:2cqw;align-items:center}
 .tabs{position:absolute;left:0;right:0;bottom:0;height:19cqw;border-top:1px solid #e3dfd4;background:var(--papel);display:flex;justify-content:space-around;padding-top:3.2cqw;z-index:3}
 .tabs span{display:flex;flex-direction:column;align-items:center;gap:1.2cqw;font-size:2.8cqw;color:#8e9ba1}
 .tabs span svg{width:6cqw;height:6cqw;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .tabs span.on{color:var(--azul)}
-.folha{position:absolute;inset:11cqw 0 0 0;z-index:6;background:var(--papel);border-radius:8cqw 8cqw 0 0;box-shadow:0 -2cqw 6cqw rgba(22,37,46,.18);padding:6cqw 5cqw;text-align:center;visibility:hidden}
+.folha{position:absolute;inset:50cqw 0 0 0;z-index:6;background:var(--papel);border-radius:8cqw 8cqw 0 0;box-shadow:0 -2cqw 6cqw rgba(22,37,46,.18);padding:6cqw 5cqw;text-align:center;visibility:hidden}
 .folha .marca{display:block;width:12cqw;height:16cqw;margin:0 auto 3.4cqw;background:var(--azul);-webkit-mask:url(logo/logo-preto.webp) center/contain no-repeat;mask:url(logo/logo-preto.webp) center/contain no-repeat}
 .folha h4{font-family:var(--f-app);font-weight:700;font-size:5.4cqw;line-height:1.1}
 .folha p{font-size:3.1cqw;color:var(--texto);margin:2.4cqw auto 4cqw;max-width:64cqw;line-height:1.4}
@@ -234,7 +234,7 @@ h1,h2,h3{font-family:var(--f-tit);font-weight:600;color:var(--tinta);letter-spac
 
 /* ---------- app: o celular sobe e os recursos aparecem dos lados ---------- */
 .show{position:relative;overflow:hidden}
-.show .stage{--pw:clamp(12rem,28svh,17rem);--ph:calc(var(--pw) * 2.108);--gap:3.4rem;position:relative;height:100svh;min-height:36rem;perspective:1700px}
+.show .stage{--pw:clamp(13rem,35svh,20rem);--ph:calc(var(--pw) * 2.108);--gap:3.4rem;position:relative;height:100svh;min-height:36rem;perspective:1700px}
 .show .topo-s{position:absolute;z-index:6;left:0;right:0;top:5.8rem;padding-inline:var(--pad);max-width:96rem;margin-inline:auto}
 .show .rot{margin-bottom:1rem}
 .show .prog{position:absolute;z-index:6;left:50%;bottom:clamp(1.4rem,3.2vh,2.4rem);transform:translateX(-50%);display:flex;align-items:center;gap:.6rem}
@@ -244,28 +244,25 @@ h1,h2,h3{font-family:var(--f-tit);font-weight:600;color:var(--tinta);letter-spac
 .show .prog .ct{margin-left:.8rem;font-size:.82rem;color:var(--suave);font-variant-numeric:tabular-nums}
 .show .prog .ct b{color:var(--tinta);font-weight:600}
 .show .manchete{position:absolute;z-index:1;left:0;right:0;top:50%;transform:translateY(-50%);padding-inline:var(--pad);max-width:68rem;margin-inline:auto;text-align:center;font-size:clamp(1.9rem,4vw,4.2rem);font-weight:500;line-height:1.08;letter-spacing:-.035em}
-.show .halo{position:absolute;z-index:1;left:50%;top:50%;width:calc(var(--pw) * 1.5);aspect-ratio:5/7;margin:0;transform:translate(-50%,-50%);-webkit-mask:var(--arco) center/100% 100% no-repeat;mask:var(--arco) center/100% 100% no-repeat;background:linear-gradient(180deg,#d6e0e7,#bccbd6);opacity:0}
+.show .halo{position:absolute;z-index:1;left:50%;bottom:0;width:calc(var(--pw) * 1.75);height:84%;transform:translateX(-50%);-webkit-mask:var(--arco) center/100% 100% no-repeat;mask:var(--arco) center/100% 100% no-repeat;background:linear-gradient(180deg,#d6e0e7,#bccbd6 70%,rgba(188,203,214,.55));opacity:0}
 .show .aparelho{position:absolute;z-index:3;left:50%;top:50%;transform-style:preserve-3d;will-change:transform}
 .show .aparelho .fone{--fw:var(--pw)}
 
 /* recursos laterais: cartao + linha + ponto sobre a tela */
 .show .calls{position:absolute;inset:0;z-index:4;pointer-events:none}
 .show .cj{position:absolute;inset:0}
-.show .call{position:absolute;top:calc(50% + (var(--f) - .5) * var(--ph));transform:translateY(-50%);width:min(17.5rem,24vw)}
+.show .call{position:absolute;top:50%;transform:translateY(-50%);width:min(19rem,24vw)}
 .show .call.l{right:calc(50% + var(--pw) / 2 + var(--gap));text-align:right}
 .show .call.r{left:calc(50% + var(--pw) / 2 + var(--gap))}
 .show .call .n{display:block;font-family:var(--f-tit);font-weight:500;color:var(--azul);font-size:.95rem;margin-bottom:.5rem}
 .show .call h3{font-size:clamp(1.3rem,1.9vw,1.9rem);font-weight:500;line-height:1.08;letter-spacing:-.025em}
 .show .call p{margin-top:.55rem;font-size:.98rem;line-height:1.45;color:var(--texto)}
 .show .call h3 + p{margin-top:.7rem}
-.show .call .ln{position:absolute;top:50%;height:0;width:calc(var(--gap) + var(--pw) / 2 * var(--dx))}
+.show .call .ln{position:absolute;top:50%;height:0;width:6rem}
 .show .call.l .ln{left:100%}
 .show .call.r .ln{right:100%}
 .show .call .ln b{display:block;height:1px;background:var(--tinta);transform-origin:0 50%}
 .show .call.r .ln b{transform-origin:100% 50%}
-.show .call .ln em{position:absolute;top:-.33rem;width:.66rem;height:.66rem;border-radius:50%;background:var(--azul);box-shadow:0 0 0 .38rem rgba(79,117,146,.28)}
-.show .call.l .ln em{right:-.1rem}
-.show .call.r .ln em{left:-.1rem}
 
 /* ---------- o que fazemos ---------- */
 .faz{padding:clamp(5rem,10vw,9rem) 0}
@@ -412,3 +409,15 @@ h1,h2,h3{font-family:var(--f-tit);font-weight:600;color:var(--tinta);letter-spac
 .pc:hover .arco{filter:drop-shadow(0 1.6rem 1.6rem rgba(27,42,51,.28))}
 .depo blockquote:hover{box-shadow:0 1.8rem 3.4rem rgba(27,42,51,.18)}
 @media (hover:none){.quem figure:hover,.faz .lado:hover,.final .cartao:hover,.depo blockquote:hover,.pc:hover{translate:none}}
+
+/* pinos ancorados nos elementos reais da tela do app (giram junto com o celular) */
+.fone .pin{position:absolute;z-index:12;width:7cqw;height:7cqw;margin:-3.5cqw 0 0 -3.5cqw;border-radius:50%;background:var(--azul);box-shadow:0 0 0 1.4cqw rgba(79,117,146,.28);pointer-events:none;opacity:0;transform:scale(0)}
+.fone .pin::after{content:"";position:absolute;inset:-1.4cqw;border-radius:50%;border:.5cqw solid rgba(79,117,146,.55);animation:pulso 2.4s ease-out infinite}
+@keyframes pulso{from{transform:scale(.8);opacity:.9}to{transform:scale(2.1);opacity:0}}
+.show .call .ln b{background:linear-gradient(90deg,var(--tinta),var(--azul))}
+.show .call.r .ln b{background:linear-gradient(270deg,var(--tinta),var(--azul))}
+
+/* reflexo que varre a tela do app a cada troca de tela */
+.tela .glare{position:absolute;inset:0;z-index:11;pointer-events:none;opacity:0;background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.55) 50%,transparent 62%);transform:translateX(-70%)}
+.tela .glare.go{animation:varre 1.15s var(--ease)}
+@keyframes varre{0%{transform:translateX(-70%);opacity:1}100%{transform:translateX(70%);opacity:0}}
