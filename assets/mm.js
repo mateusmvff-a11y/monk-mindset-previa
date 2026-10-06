@@ -144,6 +144,8 @@
   const titulo = document.querySelector('#hero .titulo');
   if (!reduz) {
     const sp = SplitText.create(titulo.querySelectorAll('span'), { type: 'chars', charsClass: 'ch' });
+    const lede = SplitText.create('#lede', { type: 'words', wordsClass: 'mw' });
+    gsap.set('#lede', { opacity: 0, y: 18 });
     const ZOOM = innerWidth < 900 ? 1.35 : 1.4;
     /* entrada (referencia Frostbound): a nevoa se abre. O fundo comeca lavado e dessaturado e ganha cor e nitidez;
        as letras do titulo saem do desfoque uma a uma; depois entram a barra, o subtitulo e o botao */
@@ -161,6 +163,7 @@
       .to(sp.chars, { opacity: 1, filter: 'blur(0px)', scale: 1, duration: 1.4, stagger: .07 }, .5)
       .to(titulo, { letterSpacing: '-.045em', duration: 2.6, ease: 'power3.out' }, .5)
       .to('#hero .base > *', { opacity: 1, y: 0, duration: 1, stagger: .14 }, 1.9)
+      .to('#lede', { opacity: 1, y: 0, duration: 1.1 }, 1.5)
       .fromTo('.hero .nv3', { opacity: .9, y: 0 }, { opacity: 0, y: 90, duration: 2.6, ease: 'power2.inOut' }, .3)
       .set(fotos, { clearProps: 'filter' }, 2.9);
 
@@ -168,6 +171,10 @@
     zo.fromTo(camadas, { scale: ZOOM }, { scale: 1, ease: 'power1.inOut', duration: 1, immediateRender: false }, 0)
       .to(titulo, { y: () => innerHeight * .7, duration: .9 }, 0)
       .to('#hero .base', { opacity: 0, y: -30, duration: .25 }, 0)
+      /* o texto pequeno ganha negrito palavra por palavra enquanto voce rola, e some quando a nevoa chega */
+      .to(lede.words, { fontWeight: 700, color: '#12304a', duration: .22, stagger: .035 }, .02)
+      .to('#lede', { y: () => innerHeight * .7, duration: .9 }, 0)
+      .to('#lede', { opacity: 0, duration: .2 }, .34)
       /* no fim do zoom out a nevoa sobe do chao e leva para a proxima secao */
       .fromTo('.hero .nv1', { opacity: 0, y: 200 }, { opacity: 1, y: 0, ease: 'power1.out', duration: .5 }, .38)
       .fromTo('.hero .nv2', { opacity: 0, y: 260, x: 70 }, { opacity: 1, y: 0, x: -30, ease: 'power1.out', duration: .55 }, .46)

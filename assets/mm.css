@@ -64,24 +64,24 @@ h1,h2,h3{font-family:var(--f-tit);font-weight:600;color:var(--tinta);letter-spac
 .topo .btn.claro:hover{background:var(--azul)}
 
 /* ---------- hero: a cena (so aqui o estilo Our Privacy) ---------- */
-.hero{position:relative;height:100svh;min-height:34rem;overflow:hidden;background:#cddae3}
+.hero{--tf:clamp(3.2rem,8.8vw,10.4rem);position:relative;height:100svh;min-height:34rem;overflow:hidden;background:#cddae3}
 .hero .cena{z-index:0;position:absolute;inset:0;transform-origin:50% 82%;will-change:transform}
 .hero .fundo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 82%}
 .hero::after{content:"";position:absolute;inset:auto 0 0 0;height:36%;z-index:5;pointer-events:none;background:linear-gradient(to bottom,rgba(18,30,24,0),rgba(18,30,24,.14) 45%,rgba(18,30,24,.38))}
 .hero .grao{position:absolute;inset:0;z-index:4;pointer-events:none;opacity:.12;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .hero .frente{position:absolute;inset:0;z-index:2;width:100%;height:100%;object-fit:cover;object-position:50% 82%;transform-origin:50% 82%;pointer-events:none;will-change:transform}
-.hero .nv{position:absolute;left:-12%;width:124%;max-width:none;height:80%;bottom:-8%;z-index:7;filter:brightness(1.55) contrast(1.08);object-fit:cover;object-position:50% 100%;mix-blend-mode:screen;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 30%);mask-image:linear-gradient(to bottom,transparent 0,#000 30%);pointer-events:none;opacity:0;will-change:transform,opacity}
-.hero .nv2{left:-6%;width:112%;height:64%;bottom:-12%;object-position:50% 100%;filter:brightness(1.7) contrast(1.05)}
-.hero .nv4{left:-14%;width:128%;height:50%;bottom:-6%;object-position:50% 100%;filter:brightness(1.9)}
-.hero .piso{position:absolute;left:0;right:0;bottom:0;height:66%;z-index:8;pointer-events:none;opacity:0;background:linear-gradient(to bottom,rgba(246,245,241,0) 0,rgba(247,246,243,.78) 36%,rgba(243,241,236,.96) 62%,#efede6 80%)}
+.hero .nv{position:absolute;left:-12%;width:124%;max-width:none;height:80%;bottom:-8%;z-index:7;filter:brightness(1.9) contrast(1.05);object-fit:fill;mix-blend-mode:screen;pointer-events:none;opacity:0;will-change:transform,opacity}
+.hero .nv2{left:-6%;width:112%;height:64%;bottom:-12%;filter:brightness(2.1) contrast(1.05)}
+.hero .nv4{left:-14%;width:128%;height:50%;bottom:-6%;filter:brightness(2.2)}
+.hero .piso{position:absolute;left:0;right:0;bottom:0;height:34%;z-index:8;pointer-events:none;opacity:0;background:linear-gradient(to bottom,rgba(246,245,241,0) 0,rgba(246,245,241,.7) 45%,#efede6 88%)}
 .hero .sol{position:absolute;inset:0;z-index:3;pointer-events:none;transform-origin:50% 82%;mix-blend-mode:soft-light;background:radial-gradient(ellipse 22% 34% at 50% 78%,rgba(255,196,110,.95),rgba(255,196,110,0) 70%),radial-gradient(ellipse 60% 40% at 50% 100%,rgba(255,214,150,.5),rgba(255,214,150,0) 70%)}
-.hero .nv3{left:-10%;width:120%;height:60%;bottom:-8%;object-position:50% 100%;opacity:0}
+.hero .nv3{left:-10%;width:120%;height:60%;bottom:-8%;opacity:0}
 .hero .veu{position:absolute;inset:0;background:linear-gradient(180deg,rgba(238,243,246,.34),rgba(238,243,246,.06) 38%,rgba(238,243,246,0) 54%);pointer-events:none}
 .hero .titulo{position:absolute;z-index:1;left:0;right:0;top:13svh;text-align:center;font-size:clamp(3.2rem,8.8vw,10.4rem);font-weight:600;color:#1f4260;letter-spacing:-.045em;line-height:.95;padding-inline:var(--pad);will-change:transform}
 .hero .titulo span{display:inline-block}
-.hero .base{position:absolute;z-index:6;left:0;right:0;bottom:0;padding:0 var(--pad) clamp(1.4rem,3.4vw,2.6rem);display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;max-width:96rem;margin-inline:auto}
-.hero .sub{position:relative;max-width:27rem;font-size:clamp(1.35rem,2.05vw,2.1rem);line-height:1.22;letter-spacing:-.02em;color:#fff;font-weight:600;font-family:var(--f-tit);padding:1.3rem 1.6rem 1.4rem;border-radius:1.7rem;background:linear-gradient(135deg,rgba(255,255,255,.26),rgba(255,255,255,.07) 55%,rgba(255,255,255,.14));backdrop-filter:blur(26px) saturate(1.5) brightness(1.06);-webkit-backdrop-filter:blur(26px) saturate(1.5) brightness(1.06);box-shadow:0 0 0 1px rgba(255,255,255,.38) inset,0 1px 0 rgba(255,255,255,.55) inset,0 -1px 0 rgba(255,255,255,.12) inset,0 1.6rem 3.4rem rgba(12,24,18,.28);overflow:hidden}
-.hero .sub::before{content:"";position:absolute;inset:-60% -20% auto -20%;height:100%;background:radial-gradient(ellipse at 30% 0%,rgba(255,255,255,.35),transparent 60%);pointer-events:none}
+.hero .base{position:absolute;z-index:6;left:0;right:0;bottom:0;padding:0 var(--pad) clamp(1.4rem,3.4vw,2.6rem);display:flex;align-items:flex-end;justify-content:flex-end;gap:2rem;max-width:96rem;margin-inline:auto}
+.hero .lede{position:absolute;z-index:9;left:0;right:0;top:calc(12.5svh + var(--tf) * 1.04);text-align:center;margin:0 auto;padding-inline:var(--pad);max-width:44rem;font-family:var(--f-tit);font-size:clamp(1rem,1.35vw,1.3rem);line-height:1.4;font-weight:400;color:#1f4260;letter-spacing:0}
+.hero .lede .mw{display:inline-block;white-space:pre}
 .hero .acoes{display:flex;align-items:center;gap:1.2rem}
 .hero a.ios{transition:opacity .25s}
 .hero a.ios:hover{opacity:.82}
@@ -355,7 +355,8 @@ h1,h2,h3{font-family:var(--f-tit);font-weight:600;color:var(--tinta);letter-spac
   .hero .titulo{top:15svh;font-size:clamp(3rem,15vw,5.4rem)}
   .hero .titulo span{display:block}
   .hero .base{flex-direction:column;align-items:flex-start;gap:1rem}
-  .hero .sub{font-size:1.12rem;padding:.8rem 1.1rem;max-width:17rem;border-radius:1.2rem}
+  .hero{--tf:clamp(3rem,15.5vw,5.6rem)}
+  .hero .lede{top:calc(15svh + var(--tf) * 2 * .98 + .6rem);font-size:1.02rem;max-width:20rem}
   .hero .ios .tx small{display:none}
   .quem .grade{grid-template-columns:1fr}
   .quem .t1{margin-bottom:-2rem}.quem .t2{margin-top:-2rem}
@@ -406,3 +407,13 @@ h1,h2,h3{font-family:var(--f-tit);font-weight:600;color:var(--tinta);letter-spac
 .faz .redes a,.rodape a{transition:background .25s,color .25s}
 .final .cartao .bg,.faz .lado .bg{will-change:transform}
 @media (hover:none){.quem figure:hover img,.pc:hover .arco img,.faz .lado:hover .bg,.final .cartao:hover .bg{transform:none}}
+
+/* ---------- hover reforcado: o bloco SOBE (propriedade `translate`, que nao briga com o transform do GSAP) ---------- */
+.quem figure,.faz .lado,.final .cartao,.depo blockquote,.pc{transition:translate .55s var(--ease),box-shadow .55s var(--ease),background .45s var(--ease)}
+.quem figure:hover,.faz .lado:hover,.final .cartao:hover,.depo blockquote:hover,.pc:hover{translate:0 -12px}
+.quem figure:hover img,.pc:hover .arco img,.faz .lado:hover .bg,.lc:hover img,.final .cartao:hover .bg{transform:scale(1.12)}
+.quem figure:hover,.faz .lado:hover,.final .cartao:hover{box-shadow:0 2.2rem 4.2rem rgba(27,42,51,.28)}
+.pc .arco{transition:filter .55s var(--ease)}
+.pc:hover .arco{filter:drop-shadow(0 1.6rem 1.6rem rgba(27,42,51,.28))}
+.depo blockquote:hover{box-shadow:0 1.8rem 3.4rem rgba(27,42,51,.18)}
+@media (hover:none){.quem figure:hover,.faz .lado:hover,.final .cartao:hover,.depo blockquote:hover,.pc:hover{translate:none}}
