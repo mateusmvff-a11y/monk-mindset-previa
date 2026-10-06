@@ -461,7 +461,6 @@ h1,h2,h3{font-family:var(--f-tit);font-weight:600;color:var(--tinta);letter-spac
   .show .call h3{font-size:clamp(1.8rem,2.7vw,2.7rem);line-height:1.05}
   .show .call p{font-size:clamp(1.02rem,1.25vw,1.2rem);line-height:1.55;max-width:27rem;color:var(--texto)}
   .show .call h3 + p{margin-top:1rem}
-  .show .call:not(:first-child) p{color:var(--suave)}
 }
 
 /* iris blur no hover: a copia desfocada aparece onde o titulo nitido some (mascaras complementares), foco no cursor */
@@ -469,3 +468,11 @@ h1,h2,h3{font-family:var(--f-tit);font-weight:600;color:var(--tinta);letter-spac
 .hero .titulo{-webkit-mask-image:radial-gradient(ellipse 38% 150% at var(--ix) var(--iy),#000 30%,rgba(0,0,0,var(--ia)) 100%);mask-image:radial-gradient(ellipse 38% 150% at var(--ix) var(--iy),#000 30%,rgba(0,0,0,var(--ia)) 100%)}
 .hero .titulo-b{pointer-events:none;filter:blur(3px);-webkit-mask-image:radial-gradient(ellipse 38% 150% at var(--ix) var(--iy),transparent 30%,#000 100%);mask-image:radial-gradient(ellipse 38% 150% at var(--ix) var(--iy),transparent 30%,#000 100%)}
 .hero .titulo{padding-block:.16em;margin-top:-.16em}
+
+/* palavras-chave em negrito nos textos do celular */
+.show .call h3 b{font-weight:700}
+.show .call p b{font-weight:700;color:var(--tinta)}
+
+/* quebras de linha sem palavra sozinha: titulos equilibrados, paragrafos sem orfa */
+h1,h2,h3,.problema .fecho{text-wrap:balance}
+p,li,blockquote{text-wrap:pretty}
