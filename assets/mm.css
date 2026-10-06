@@ -488,3 +488,6 @@ p,li,blockquote{text-wrap:pretty}
   .show .call p{max-width:none}
   .show .call h3{max-width:none}
 }
+
+/* titulo do hero no mesmo peso dos demais titulos do site */
+.hero .titulo{font-weight:500}
