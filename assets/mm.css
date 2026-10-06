@@ -491,3 +491,9 @@ p,li,blockquote{text-wrap:pretty}
 
 /* titulo do hero no mesmo peso dos demais titulos do site */
 .hero .titulo{font-weight:500}
+
+/* frases curtas numa linha so; em celulares estreitos (nao cabem a 17px) quebram em duas linhas equilibradas */
+.problema .fecho,.quem p{max-width:none;white-space:nowrap}
+@media (max-width:560px){
+  .problema .fecho,.quem p{white-space:normal;text-wrap:balance;max-width:22rem;font-size:1.1rem}
+}
