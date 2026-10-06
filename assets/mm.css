@@ -497,3 +497,9 @@ p,li,blockquote{text-wrap:pretty}
 @media (max-width:560px){
   .problema .fecho,.quem p{white-space:normal;text-wrap:balance;max-width:22rem;font-size:1.1rem}
 }
+
+/* mobile, seção do celular: aparelho maior e texto logo abaixo dele (sem buraco no meio) */
+@media (max-width:900px){
+  .show .stage{--pw:min(62vw,calc((100svh - 21.5rem) / 2.108),22rem)}
+  .show .cj{inset:calc(6.2rem + var(--ph) + 1.8rem) 0 auto 0}
+}
