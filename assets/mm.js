@@ -169,9 +169,10 @@
       .to(titulo, { y: () => innerHeight * .7, duration: .9 }, 0)
       .to('#hero .base', { opacity: 0, y: -30, duration: .25 }, 0)
       /* no fim do zoom out a nevoa sobe do chao e leva para a proxima secao */
-      .fromTo('.hero .nv1', { opacity: 0, y: 160 }, { opacity: 1, y: 0, ease: 'power1.out', duration: .55 }, .42)
-      .fromTo('.hero .nv2', { opacity: 0, y: 220, x: 60 }, { opacity: .8, y: 0, x: -30, ease: 'power1.out', duration: .6 }, .5)
-      .fromTo('.hero .piso', { opacity: 0 }, { opacity: 1, duration: .3 }, .75)
+      .fromTo('.hero .nv1', { opacity: 0, y: 200 }, { opacity: 1, y: 0, ease: 'power1.out', duration: .5 }, .38)
+      .fromTo('.hero .nv2', { opacity: 0, y: 260, x: 70 }, { opacity: 1, y: 0, x: -30, ease: 'power1.out', duration: .55 }, .46)
+      .fromTo('.hero .nv4', { opacity: 0, y: 300, x: -60 }, { opacity: 1, y: 0, x: 40, ease: 'power1.out', duration: .5 }, .56)
+      .fromTo('.hero .piso', { opacity: 0 }, { opacity: 1, duration: .32 }, .68)
   }
 
   /* ---------- problema: leque de cartas que troca na rolagem ---------- */
