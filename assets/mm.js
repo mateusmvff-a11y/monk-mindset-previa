@@ -143,7 +143,7 @@
   const titulo = document.querySelector('#hero .titulo');
   if (!reduz) {
     const sp = SplitText.create(titulo.querySelectorAll('span'), { type: 'chars', charsClass: 'ch' });
-    const ZOOM = innerWidth < 900 ? 1.5 : 1.45;
+    const ZOOM = innerWidth < 900 ? 1.6 : 1.65;
     /* entrada (referencia Frostbound): a nevoa se abre. O fundo comeca lavado e dessaturado e ganha cor e nitidez;
        as letras do titulo saem do desfoque uma a uma; depois entram a barra, o subtitulo e o botao */
     const fotos = [cena.querySelector('.fundo'), frente];
