@@ -165,7 +165,9 @@
     const zo = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: '#hero', start: 'top top', end: '+=125%', pin: true, scrub: .7, anticipatePin: 1, refreshPriority: 3 } });
     zo.fromTo(camadas, { scale: ZOOM }, { scale: 1, ease: 'power1.inOut', duration: 1, immediateRender: false }, 0)
       .to(titulo, { y: () => innerHeight * .7, duration: .9 }, 0)
-      .to('#hero .base', { opacity: 0, y: -30, duration: .25 }, 0);
+      .to('#hero .base', { opacity: 0, y: -30, duration: .25 }, 0)
+      /* no fim do zoom out a nevoa sobe do chao e leva para a proxima secao */
+      .fromTo('#nevoa', { opacity: 0, yPercent: 38 }, { opacity: 1, yPercent: 0, ease: 'power1.out', duration: .5 }, .5);
   }
 
   /* ---------- problema: feed infinito que corre dos lados e se desfaz na paz ---------- */
