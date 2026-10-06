@@ -289,7 +289,7 @@
       showTL.to(ap, { rotationY: giro, rotationX: 4, rotationZ: -giro * .1, duration: 1.6, ease: 'sine.inOut' }, t0 - .1);
       g.querySelectorAll('.call').forEach((c, k) => {
         const d = t0 + .2 + k * .5, dir = c.classList.contains('l') ? -1 : 1;
-        showTL.fromTo(c, { opacity: 0, x: 10 * dir }, { opacity: 1, x: 0, duration: .7, ease: 'sine.out' }, d)
+        showTL.fromTo(c, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .7, ease: 'sine.out' }, d)
           .to(c._w, { opacity: 1, filter: 'blur(0px)', y: 0, duration: .6, stagger: .03, ease: 'sine.out' }, d + .05);
         if (i < 3) showTL.to(c, { opacity: 0, duration: .5, ease: 'sine.inOut' }, t0 + PASSO - .55).to(c._w, { opacity: 0, filter: 'blur(4px)', duration: .5 }, t0 + PASSO - .55);
       });
