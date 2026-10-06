@@ -179,7 +179,7 @@
     zo.fromTo(camadas, { scale: ZOOM }, { scale: 1, ease: 'power1.inOut', duration: .9, immediateRender: false }, 0)
       .to('#hero .base', { opacity: 0, y: -30, duration: .25 }, 0)
       .to(lede.words, { opacity: 1, filter: 'blur(0px)', y: 0, duration: .2, stagger: .045 }, .06)
-      .to(lede.words.slice(-3), { fontWeight: 800, color: '#0f2a42', duration: .2, stagger: .05 }, .5)
+      .to(lede.words.slice(-3), { fontWeight: 800, color: '#4d6c80', duration: .2, stagger: .05 }, .5)
       .to({}, { duration: .1 }, .9)
       .to([titulo, copia, '#lede'], { y: () => innerHeight * .85, duration: .4, ease: 'power1.in' }, 1.0)
       /* saida = inverso da entrada: o texto fica enevoado e desfocado enquanto desce atras da montanha */
