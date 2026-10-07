@@ -510,3 +510,31 @@ p,li,blockquote{text-wrap:pretty}
 .hero.v-on .fundo-v,.hero.v-on .frente-v{opacity:1}
 .hero.v-off .fundo,.hero.v-off .frente{visibility:hidden}
 @media (prefers-reduced-motion:reduce){.hero .fundo-v,.hero .frente-v{display:none}}
+
+/* grao leve em toda a pagina (estatico, por cima de tudo, sem pegar clique); substitui o grao so do hero */
+.hero .grao{display:none}
+body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opacity:.045;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='3 0 0 0 -1 3 0 0 0 -1 3 0 0 0 -1 0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* indicador de progresso: pilula de vidro com pontos; o ativo vira uma barrinha que enche, e o nome do recurso ao lado */
+.show .prog{gap:.55rem;padding:.7rem 1.15rem;border-radius:999px;background:rgba(255,255,255,.5);-webkit-backdrop-filter:blur(14px) saturate(1.15);backdrop-filter:blur(14px) saturate(1.15);border:1px solid rgba(255,255,255,.75);box-shadow:0 .7rem 2rem rgba(27,42,51,.09)}
+.show .prog button{position:relative;width:.55rem;height:.55rem;border-radius:99px;display:block;overflow:hidden;background:#c4ced4;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.show .prog button::before{display:none}
+.show .prog button::after{content:"";position:absolute;inset:-.5rem;overflow:visible}
+.show .prog button.on{width:2.3rem}
+.show .prog button i{position:absolute;inset:0;height:auto;border-radius:99px;background:var(--tinta);transform-origin:0 50%}
+.show .prog .ct{margin-left:.55rem;padding-left:.9rem;border-left:1px solid rgba(27,42,51,.14);display:flex;align-items:baseline;gap:.5rem;font-size:.8rem;color:var(--suave);white-space:nowrap}
+.show .prog .ct b{font-weight:600;color:var(--tinta);font-variant-numeric:tabular-nums}
+.show .prog .ct em{font-style:normal;letter-spacing:.01em;min-width:4.4rem}
+@media (max-width:900px){
+  .show .prog{padding:.55rem .9rem;gap:.5rem}
+  .show .prog button{width:.5rem;height:.5rem}
+  .show .prog button.on{width:1.9rem}
+  .show .prog .ct{display:none}
+}
+@media (max-width:900px){
+  .show .prog{top:4.2rem}
+  .show .stage{--pw:min(62vw,calc((100svh - 22.2rem) / 2.108),22rem)}
+  .show .aparelho{top:calc(6.9rem + var(--ph) / 2)}
+  .show .halo{top:calc(6.9rem + var(--ph) * .3)}
+  .show .cj{inset:calc(6.9rem + var(--ph) + 1.8rem) 0 auto 0}
+}

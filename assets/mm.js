@@ -282,6 +282,7 @@
     const k = Math.max(i, 0);
     dots.forEach((b, n) => b.classList.toggle('on', n === k));
     ct.textContent = '0' + (k + 1);
+    ct.nextElementSibling.textContent = ['Schedule', 'Blocking', 'Progress', 'Library'][k];
     fones.app.mostra(nomes[k]);
   }
   const INTRO = 3.6, PASSO = 3.4;
