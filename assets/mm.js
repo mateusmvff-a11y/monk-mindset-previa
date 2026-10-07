@@ -146,10 +146,11 @@
   const frente = document.getElementById('frente');
   const sol = document.getElementById('sol');
   const camadas = [cena, frente, sol];
-  /* o video tem 1280 px: no celular (esticado e ampliado) fica mais mole que a foto, entao la fica a foto ate sair a versao Full HD */
-  const VIDEO_NO_CELULAR = false;
+  /* video em duas versoes: 2560 para telas grandes e 1920 para o resto (inclusive o celular) */
+  const VIDEO_NO_CELULAR = true;
   let vFundo = document.getElementById('fundo-v'), vFrente = document.getElementById('frente-v');
   if (reduz || (innerWidth <= 900 && !VIDEO_NO_CELULAR)) { vFundo && vFundo.remove(); vFrente && vFrente.remove(); vFundo = vFrente = null; }
+  if (vFundo && vFrente) { const fonte = innerWidth > 1500 ? 'assets/video/hero-2560.mp4' : 'assets/video/hero-1920.mp4'; vFundo.src = fonte; vFrente.src = fonte; }
   if (vFrente) camadas.push(vFrente);
   const titulo = document.querySelector('#hero .titulo');
   if (!reduz) {
